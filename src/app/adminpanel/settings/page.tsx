@@ -7,11 +7,11 @@ type Def = { key: string; label: string; type?: "text" | "textarea" | "image" | 
 
 const GROUPS: { title: string; defs: Def[] }[] = [
   {
-    title: "Загальне",
+    title: "Логотип і назва (брендінг)",
     defs: [
+      { key: "logo_image", label: "Логотип компанії", type: "image", hint: "PNG або SVG на прозорому фоні. Показується у шапці, футері та як іконка сайту. Якщо порожньо — використовується стандартна іконка автобуса" },
       { key: "company_name", label: "Назва компанії" },
       { key: "header_subtitle", label: "Підзаголовок у шапці" },
-      { key: "logo_image", label: "Логотип компанії", type: "image", hint: "PNG/SVG на прозорому фоні. Якщо порожньо — використовується стандартна іконка" },
       { key: "working_hours", label: "Графік роботи" },
       { key: "area", label: "Регіон роботи" },
     ],

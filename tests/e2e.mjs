@@ -28,6 +28,7 @@ fs.mkdirSync(OUT, { recursive: true });
 
 
 
+
 const errors = [];
 const results = [];
 const ok = (name, cond, extra = "") => {
@@ -97,6 +98,19 @@ ok("hero viber button", await page.locator(".hero__actions a.btn--viber").count(
 
 // floating buttons
 ok("floating quick buttons", await page.locator(".floating a").count() >= 3);
+ok("design: top dark line removed", await page.locator(".topline").count() === 0);
+const btnH = await page.locator(".hero__actions .btn").first().evaluate((el) => Math.round(el.getBoundingClientRect().height));
+ok("design: hero buttons are compact (<=50px)", btnH <= 50, "height=" + btnH);
+const noIcon = await page.evaluate(() => {
+  const items = [...document.querySelectorAll("button, a.btn")];
+  return items.filter((el) => el.offsetParent !== null && !el.querySelector("svg")).map((el) => el.textContent.trim().slice(0, 24));
+});
+ok("design: every button has an SVG icon", noIcon.length === 0, noIcon.join(" | ").slice(0, 80));
+const tgWhite = await page.evaluate(() => {
+  const el = document.querySelector(".floating__wa svg, .btn--wa svg");
+  return el ? getComputedStyle(el).fill : "";
+});
+ok("design: messenger icon is white on coloured button", /255, 255, 255/.test(tgWhite), tgWhite);
 
 await page.screenshot({ path: `${OUT}/01-landing-desktop-top.png` });
 await autoScroll(page);

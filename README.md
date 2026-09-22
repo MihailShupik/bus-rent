@@ -114,6 +114,7 @@ node scripts/telegram-poll.mjs     # у другому терміналі, по�
 | ![Конструктор блоків](docs/screenshots/06-admin-block-constructor.png) | ![Блок, створений у конструкторі](docs/screenshots/08-custom-block-faq.png) |
 | ![Розділ Telegram-бота](docs/screenshots/09-admin-telegram-bot.png) | ![Додавання адміністратора бота](docs/screenshots/10-admin-telegram-add-admin.png) |
 | ![Стан системи](docs/screenshots/11-admin-system-health.png) | ![Логотип компанії на сайті](docs/screenshots/12-landing-logo.png) |
+| ![Мобільна версія (компактні кнопки)](docs/screenshots/14-mobile-compact.png) | ![Логотип у шапці](docs/screenshots/15-logo-in-header.png) |
 
 ---
 

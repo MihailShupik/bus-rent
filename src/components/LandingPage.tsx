@@ -228,20 +228,6 @@ TELEGRAM_BOT_TOKEN=<токен від @BotFather>`}
 
   return (
     <>
-      {/* ------------------------------ Topline ------------------------------ */}
-      <div className="topline">
-        <div className="container topline__row">
-          <div className="topline__group">
-            <span>{s("company_name", fbCompany)}</span>
-            <span className="topline__group--hide">{contacts.area}</span>
-          </div>
-          <div className="topline__group">
-            <span>{contacts.workingHours}</span>
-            <a href={links.phone}>{contacts.phoneDisplay}</a>
-          </div>
-        </div>
-      </div>
-
       {/* ------------------------------ Header ------------------------------- */}
       <header className="header">
         <div className="container header__row">
@@ -262,7 +248,7 @@ TELEGRAM_BOT_TOKEN=<токен від @BotFather>`}
               <strong>{contacts.phoneDisplay}</strong>
               <span>{contacts.workingHours}</span>
             </a>
-            <button className="btn btn--accent" onClick={() => goToForm()}>Замовити перевезення</button>
+            <button className="btn btn--accent" onClick={() => goToForm()}><IconSend size={15} /> Замовити перевезення</button>
             <button className="burger" aria-label="Меню" onClick={() => setDrawer(true)}><IconMenu size={26} /></button>
           </div>
         </div>
@@ -279,10 +265,10 @@ TELEGRAM_BOT_TOKEN=<токен від @BotFather>`}
           {navItems.map((n) => <a key={n.href} href={n.href} onClick={() => setDrawer(false)}>{n.label}</a>)}
           <div style={{ display: "grid", gap: 10, marginTop: 18 }}>
             <a className="btn btn--accent btn--block" href={links.phone}><IconPhone size={18} /> {contacts.phoneDisplay}</a>
-            <a className="btn btn--wa btn--block" href={links.whatsapp} target="_blank" rel="noreferrer"><IconWhatsApp size={20} /> WhatsApp</a>
-            <a className="btn btn--viber btn--block" href={links.viber} target="_blank" rel="noreferrer"><IconViber size={20} /> Viber</a>
-            {links.telegram && <a className="btn btn--tg btn--block" href={links.telegram} target="_blank" rel="noreferrer"><IconTelegram size={20} /> Telegram</a>}
-            <button className="btn btn--navy btn--block" onClick={() => goToForm()}>Замовити перевезення</button>
+            <a className="btn btn--wa btn--block" href={links.whatsapp} target="_blank" rel="noreferrer"><IconWhatsApp size={18} color="#fff" /> WhatsApp</a>
+            <a className="btn btn--viber btn--block" href={links.viber} target="_blank" rel="noreferrer"><IconViber size={18} color="#fff" /> Viber</a>
+            {links.telegram && <a className="btn btn--tg btn--block" href={links.telegram} target="_blank" rel="noreferrer"><IconTelegram size={18} color="#fff" /> Telegram</a>}
+            <button className="btn btn--navy btn--block" onClick={() => goToForm()}><IconSend size={15} /> Замовити перевезення</button>
           </div>
         </div>
       </div>
@@ -303,17 +289,17 @@ TELEGRAM_BOT_TOKEN=<токен від @BotFather>`}
               </p>
               <div className="hero__actions">
                 <button className="btn btn--accent btn--lg" onClick={() => goToForm()}>
-                  {s("hero_button_primary", "Розрахувати вартість")} <IconArrowRight size={18} />
+                  {s("hero_button_primary", "Розрахувати вартість")} <IconArrowRight size={16} />
                 </button>
                 <a className="btn btn--wa btn--lg" href={links.whatsapp} target="_blank" rel="noreferrer" onClick={() => track("click_whatsapp")}>
-                  <IconWhatsApp size={20} /> {s("hero_button_whatsapp", "WhatsApp")}
+                  <IconWhatsApp size={18} color="#fff" /> {s("hero_button_whatsapp", "WhatsApp")}
                 </a>
                 <a className="btn btn--viber btn--lg" href={links.viber} target="_blank" rel="noreferrer" onClick={() => track("click_viber")}>
-                  <IconViber size={20} /> {s("hero_button_viber", "Viber")}
+                  <IconViber size={18} color="#fff" /> {s("hero_button_viber", "Viber")}
                 </a>
                 {links.telegram && (
                   <a className="btn btn--tg btn--lg" href={links.telegram} target="_blank" rel="noreferrer" onClick={() => track("click_telegram")}>
-                    <IconTelegram size={20} /> Telegram
+                    <IconTelegram size={18} color="#fff" /> Telegram
                   </a>
                 )}
               </div>
@@ -401,7 +387,7 @@ TELEGRAM_BOT_TOKEN=<токен від @BotFather>`}
                         <span> / {priceUnit(b.price_unit)}</span>
                       </div>
                       <button className="btn btn--accent" onClick={() => goToForm(`${b.name}${b.seats ? ` (${b.seats} місць)` : ""}`)}>
-                        Замовити
+                        <IconSend size={15} /> Замовити
                       </button>
                     </div>
                   </div>
@@ -632,10 +618,10 @@ TELEGRAM_BOT_TOKEN=<токен від @BotFather>`}
               </div>
             </div>
             <div style={{ display: "flex", gap: 12, flexWrap: "wrap", marginTop: 26, justifyContent: "center" }}>
-              <a className="btn btn--wa btn--lg" href={links.whatsapp} target="_blank" rel="noreferrer"><IconWhatsApp size={20} /> WhatsApp</a>
-              <a className="btn btn--viber btn--lg" href={links.viber} target="_blank" rel="noreferrer"><IconViber size={20} /> Viber</a>
-              {links.telegram && <a className="btn btn--tg btn--lg" href={links.telegram} target="_blank" rel="noreferrer"><IconTelegram size={20} /> Telegram</a>}
-              <button className="btn btn--accent btn--lg" onClick={() => goToForm()}>Замовити перевезення</button>
+              <a className="btn btn--wa btn--lg" href={links.whatsapp} target="_blank" rel="noreferrer"><IconWhatsApp size={18} color="#fff" /> WhatsApp</a>
+              <a className="btn btn--viber btn--lg" href={links.viber} target="_blank" rel="noreferrer"><IconViber size={18} color="#fff" /> Viber</a>
+              {links.telegram && <a className="btn btn--tg btn--lg" href={links.telegram} target="_blank" rel="noreferrer"><IconTelegram size={18} color="#fff" /> Telegram</a>}
+              <button className="btn btn--accent btn--lg" onClick={() => goToForm()}><IconSend size={16} /> Замовити перевезення</button>
             </div>
           </div>
         </section>
@@ -655,10 +641,10 @@ TELEGRAM_BOT_TOKEN=<токен від @BotFather>`}
               </a>
               <p style={{ marginTop: 16, maxWidth: 340 }}>{s("footer_text", "")}</p>
               <div className="footer__social">
-                <a href={links.whatsapp} target="_blank" rel="noreferrer" aria-label="WhatsApp"><IconWhatsApp size={22} /></a>
-                <a href={links.viber} target="_blank" rel="noreferrer" aria-label="Viber"><IconViber size={22} /></a>
-                {links.telegram && <a href={links.telegram} target="_blank" rel="noreferrer" aria-label="Telegram"><IconTelegram size={22} /></a>}
-                <a href={links.phone} aria-label="Телефон"><IconPhone size={20} /></a>
+                <a href={links.whatsapp} target="_blank" rel="noreferrer" aria-label="WhatsApp"><IconWhatsApp size={20} color="#fff" /></a>
+                <a href={links.viber} target="_blank" rel="noreferrer" aria-label="Viber"><IconViber size={20} color="#fff" /></a>
+                {links.telegram && <a href={links.telegram} target="_blank" rel="noreferrer" aria-label="Telegram"><IconTelegram size={20} color="#fff" /></a>}
+                <a href={links.phone} aria-label="Телефон"><IconPhone size={19} color="#fff" /></a>
               </div>
             </div>
             <div>
@@ -686,10 +672,10 @@ TELEGRAM_BOT_TOKEN=<токен від @BotFather>`}
 
       {/* ----------------------------- Floating buttons ---------------------- */}
       <div className="floating">
-        <a className="floating__wa" href={links.whatsapp} target="_blank" rel="noreferrer" aria-label="WhatsApp" onClick={() => track("click_whatsapp")}><IconWhatsApp size={26} /></a>
-        <a className="floating__viber" href={links.viber} target="_blank" rel="noreferrer" aria-label="Viber" onClick={() => track("click_viber")}><IconViber size={26} /></a>
-        {links.telegram && <a className="floating__tg" href={links.telegram} target="_blank" rel="noreferrer" aria-label="Telegram" onClick={() => track("click_telegram")}><IconTelegram size={26} /></a>}
-        <a className="floating__call" href={links.phone} aria-label="Подзвонити" onClick={() => track("click_phone")}><IconPhone size={24} /></a>
+        <a className="floating__wa" href={links.whatsapp} target="_blank" rel="noreferrer" aria-label="WhatsApp" onClick={() => track("click_whatsapp")}><IconWhatsApp size={24} color="#fff" /></a>
+        <a className="floating__viber" href={links.viber} target="_blank" rel="noreferrer" aria-label="Viber" onClick={() => track("click_viber")}><IconViber size={24} color="#fff" /></a>
+        {links.telegram && <a className="floating__tg" href={links.telegram} target="_blank" rel="noreferrer" aria-label="Telegram" onClick={() => track("click_telegram")}><IconTelegram size={24} color="#fff" /></a>}
+        <a className="floating__call" href={links.phone} aria-label="Подзвонити" onClick={() => track("click_phone")}><IconPhone size={22} color="#fff" /></a>
         <button className="floating__top" aria-label="Догори" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} style={{ border: "none" }}>
           <span style={{ color: "#fff", display: "grid", placeItems: "center" }}><Icon name="arrow" size={22} /></span>
         </button>
@@ -752,9 +738,9 @@ TELEGRAM_BOT_TOKEN=<токен від @BotFather>`}
 
               <div style={{ display: "flex", gap: 12, flexWrap: "wrap", marginTop: 22 }}>
                 <button className="btn btn--accent btn--lg" onClick={() => { setGalleryBus(null); goToForm(`${galleryBus.name}${galleryBus.seats ? ` (${galleryBus.seats} місць)` : ""}`); }}>
-                  Замовити цей транспорт
+                  <IconSend size={16} /> Замовити цей транспорт
                 </button>
-                <a className="btn btn--wa btn--lg" href={links.whatsapp} target="_blank" rel="noreferrer"><IconWhatsApp size={20} /> Запитати у WhatsApp</a>
+                <a className="btn btn--wa btn--lg" href={links.whatsapp} target="_blank" rel="noreferrer"><IconWhatsApp size={18} color="#fff" /> Запитати у WhatsApp</a>
               </div>
             </div>
           </div>
