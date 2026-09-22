@@ -15,15 +15,12 @@ const emptyData: SiteData = { settings: {}, buses: [], services: [], advantages:
 
 const KNOWN_TYPES = ["advantages", "steps"];
 
-/** Логотип компанії: завантажений з адмінки або стандартна SVG-іконка. */
+/**
+ * Логотип компанії: завантажений з адмінки показуємо як звичайне зображення
+ * (без рамок-«коробок»), інакше — стандартна SVG-іконка автобуса.
+ */
 function BrandMark({ logo, size = 26, badge = false }: { logo?: string; size?: number; badge?: boolean }) {
-  if (logo) {
-    return (
-      <span className="brand__mark brand__mark--logo" style={badge ? { background: "#fff" } : undefined}>
-        <img src={logo} alt="" />
-      </span>
-    );
-  }
+  if (logo) return <img className="brand__logo" src={logo} alt="" />;
   return <span className="brand__mark" style={badge ? { background: "linear-gradient(135deg,#ff7a1a,#ffa64d)" } : undefined}><IconBus size={size} /></span>;
 }
 
@@ -250,7 +247,10 @@ TELEGRAM_BOT_TOKEN=<токен від @BotFather>`}
               <span>{contacts.workingHours}</span>
             </a>
             <button className="btn btn--accent" onClick={() => goToForm()}><IconSend size={15} /> Замовити перевезення</button>
-            <button className="burger" aria-label="Меню" onClick={() => setDrawer(true)}><IconMenu size={26} /></button>
+            <a className="header__call" href={links.phone} aria-label="Подзвонити" onClick={() => track("click_phone")}>
+              <IconPhone size={19} color="#fff" />
+            </a>
+            <button className="burger" aria-label="Меню" onClick={() => setDrawer(true)}><IconMenu size={22} /></button>
           </div>
         </div>
       </header>

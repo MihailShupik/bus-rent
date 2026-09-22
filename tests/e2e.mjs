@@ -323,10 +323,11 @@ await a.waitForTimeout(400);
 const l = await newPage(1440, 950);
 await l.goto(BASE + "/", { waitUntil: "networkidle" });
 await l.waitForTimeout(600);
-ok("landing: brand mark rendered (header+footer)", await l.locator(".brand__mark").count() >= 2);
-const logoImgs = await l.locator(".brand__mark--logo img").count();
+const brandEls = await l.locator(".brand__mark, .brand__logo").count();
+ok("landing: brand mark rendered (header+footer)", brandEls >= 2, "count=" + brandEls);
+const logoImgs = await l.locator(".brand__logo").count();
 if (logoImgs > 0) {
-  const logoSrc = await l.locator(".brand__mark--logo img").first().getAttribute("src");
+  const logoSrc = await l.locator(".brand__logo").first().getAttribute("src");
   ok("landing: uploaded logo has a source", !!logoSrc && logoSrc.includes("/api/media/"), String(logoSrc));
 } else {
   ok("landing: default SVG logo is used", (await l.locator(".brand__mark svg").count()) > 0);
