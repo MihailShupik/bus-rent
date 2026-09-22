@@ -176,7 +176,7 @@ await page.locator(".form-alert--error").waitFor({ timeout: 20000 }).catch(() =>
 ok("invalid phone shows error", await page.locator(".form-alert--error").count() === 1);
 
 await page.fill("#form-phone", "+380671112233");
-await page.fill("#form-route", "Київ — Одеса");
+await page.fill("#form-route", "Київ - Одеса");
 await page.fill("#form-passengers", "30");
 await page.fill("#form-message", "E2E перевірка форми");
 await page.locator('form button[type="submit"]').click();

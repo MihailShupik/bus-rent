@@ -31,7 +31,7 @@ function describeDatabase() {
     host = url.hostname;
     database = url.pathname.replace(/^\//, "");
   } catch {
-    host = "—";
+    host = "-";
   }
 
   let provider = "PostgreSQL";

@@ -1,5 +1,5 @@
 /**
- * Аудит мобільної адаптації (Playwright): 320–430px + адмінка з телефона.
+ * Аудит мобільної адаптації (Playwright): 320-430px + адмінка з телефона.
  *
  *   npm run test:mobile
  *   BASE_URL=https://bus-rent.vercel.app npm run test:mobile

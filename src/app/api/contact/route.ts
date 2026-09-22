@@ -72,7 +72,7 @@ export async function POST(request: Request) {
         console.log(`Telegram: заявку доставлено ${ok}/${deliveries.length} адміністраторам`);
         if (failed.length) {
           console.warn(
-            "Telegram: не доставлено —",
+            "Telegram: не доставлено -",
             failed.map((f) => `${f.name || f.id} (${f.error})`).join(", ")
           );
         }

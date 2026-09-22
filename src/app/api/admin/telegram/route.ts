@@ -32,7 +32,7 @@ export async function GET(request: Request) {
     const isPublicHttps = /^https:\/\//.test(siteUrl) && !/localhost|127\.0\.0\.1|\.local/.test(siteUrl);
 
     // Автоматично реєструємо webhook на публічному HTTPS-домені, якщо його ще немає.
-    // Так бот «просто працює» після деплою — без ручних кнопок.
+    // Так бот «просто працює» після деплою - без ручних кнопок.
     // Якщо webhook уже вказано (напр. на інший домен), не чіпаємо.
     let autoWebhook: any = null;
     const currentUrl = webhook?.result?.url || "";
@@ -52,7 +52,7 @@ export async function GET(request: Request) {
       webhook,
       admins,
       autoWebhook,
-      // заявки з сайту надходять завжди (вихідний виклик), команди — лише через webhook або polling
+      // заявки з сайту надходять завжди (вихідний виклик), команди - лише через webhook або polling
       leadsAlwaysWork: configured,
       siteUrl,
       isPublicHttps,
@@ -72,7 +72,7 @@ export async function POST(request: Request) {
 
     if (action === "save-token") {
       if (process.env.TELEGRAM_BOT_TOKEN) {
-        return NextResponse.json({ error: "Токен задано через змінну середовища TELEGRAM_BOT_TOKEN — змініть його там." }, { status: 400 });
+        return NextResponse.json({ error: "Токен задано через змінну середовища TELEGRAM_BOT_TOKEN - змініть його там." }, { status: 400 });
       }
       const token = String(body.token || "").trim();
       if (!/^\d+:[A-Za-z0-9_-]{20,}$/.test(token)) {

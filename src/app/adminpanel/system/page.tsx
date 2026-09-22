@@ -93,16 +93,16 @@ export default function SystemPage() {
         <div className="a-grid a-grid--stats">
           <div className="a-stat">
             <span className="a-stat__icon"><Icon name="world" size={22} /></span>
-            <strong style={{ fontSize: 18 }}>{db?.provider || "—"}</strong>
+            <strong style={{ fontSize: 18 }}>{db?.provider || "-"}</strong>
             <span>Провайдер (поза нашим сервером)</span>
             <div className="a-muted" style={{ fontSize: 12, marginTop: 6, wordBreak: "break-all" }}>
-              {db?.host || "—"}{db?.database ? ` / ${db.database}` : ""}
+              {db?.host || "-"}{db?.database ? ` / ${db.database}` : ""}
             </div>
           </div>
 
           <div className="a-stat">
             <span className="a-stat__icon"><IconSettings size={22} /></span>
-            <strong style={{ fontSize: 18 }}>{data?.server || "—"}</strong>
+            <strong style={{ fontSize: 18 }}>{data?.server || "-"}</strong>
             <span>Версія PostgreSQL</span>
             <div style={{ marginTop: 8, display: "flex", gap: 6, flexWrap: "wrap" }}>
               {db?.pooled && <span className="a-badge a-badge--info">pooled</span>}
@@ -142,7 +142,7 @@ export default function SystemPage() {
               {Object.entries(tables).map(([t, c]: any) => (
                 <tr key={t}>
                   <td><code>{t}</code></td>
-                  <td>{TABLE_LABELS[t] || "—"}</td>
+                  <td>{TABLE_LABELS[t] || "-"}</td>
                   <td>{c < 0 ? "немає таблиці" : c}</td>
                 </tr>
               ))}

@@ -65,7 +65,7 @@ export default function Dashboard() {
             <button key={c.label} className="a-stat" style={{ textAlign: "left", cursor: "pointer", border: "1px solid var(--a-line)" }}
               onClick={() => router.push(c.href)}>
               <span className="a-stat__icon"><C size={22} /></span>
-              <strong>{c.value ?? "—"}</strong>
+              <strong>{c.value ?? "-"}</strong>
               <span>{c.label}</span>
               <div className="a-muted" style={{ fontSize: 12.5, marginTop: 4 }}>{c.sub}</div>
             </button>
@@ -97,8 +97,8 @@ export default function Dashboard() {
                   <tr key={a.id}>
                     <td><strong>{a.name}</strong></td>
                     <td>{a.phone}</td>
-                    <td>{a.bus || "—"}</td>
-                    <td>{a.route || "—"}</td>
+                    <td>{a.bus || "-"}</td>
+                    <td>{a.route || "-"}</td>
                     <td><span className={`a-badge ${a.status === "new" ? "a-badge--info" : "a-badge--on"}`}>{a.status}</span></td>
                     <td>{a.created_at ? new Date(a.created_at).toLocaleString("uk-UA") : ""}</td>
                   </tr>
@@ -113,7 +113,7 @@ export default function Dashboard() {
         <span className="a-stat__icon" style={{ marginBottom: 0 }}><Icon name="settings" size={22} /></span>
         <div style={{ flex: 1 }}>
           <strong>Готово до редагування</strong>
-          <div className="a-muted">Змініть телефони, тексти, ціни, фото та кількість блоків без програміста — у розділах ліворуч.</div>
+          <div className="a-muted">Змініть телефони, тексти, ціни, фото та кількість блоків без програміста - у розділах ліворуч.</div>
         </div>
         <button className="a-btn a-btn--navy" onClick={() => router.push("/adminpanel/settings")}><IconCheck size={16} /> Налаштування</button>
       </div>

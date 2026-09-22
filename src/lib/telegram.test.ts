@@ -18,7 +18,7 @@ describe("formatLead", () => {
     name: "Ігор <script>",
     phone: "+380671112233",
     bus: "Mercedes-Benz Sprinter (19 місць)",
-    route: "Київ — Львів",
+    route: "Київ - Львів",
     passengers: "18",
     message: "Потрібен трансфер",
   };
@@ -29,7 +29,7 @@ describe("formatLead", () => {
     expect(text).toContain("Ігор &lt;script&gt;");
     expect(text).toContain("+380671112233");
     expect(text).toContain("Mercedes-Benz Sprinter");
-    expect(text).toContain("Київ — Львів");
+    expect(text).toContain("Київ - Львів");
     expect(text).toContain("18");
     expect(text).toContain("Потрібен трансфер");
   });

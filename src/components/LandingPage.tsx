@@ -17,7 +17,7 @@ const KNOWN_TYPES = ["advantages", "steps"];
 
 /**
  * Логотип компанії: завантажений з адмінки показуємо як звичайне зображення
- * (без рамок-«коробок»), інакше — стандартна SVG-іконка автобуса.
+ * (без рамок-«коробок»), інакше - стандартна SVG-іконка автобуса.
  */
 function BrandMark({ logo, size = 26, badge = false }: { logo?: string; size?: number; badge?: boolean }) {
   if (logo) return <img className="brand__logo" src={logo} alt="" />;
@@ -231,10 +231,13 @@ TELEGRAM_BOT_TOKEN=<токен від @BotFather>`}
         <div className="container header__row">
           <a className="brand" href="#hero">
             <BrandMark logo={logo} size={26} />
-            <span className="brand__text">
-              <strong>{s("company_name", fbCompany)}</strong>
-              <small>{s("header_subtitle", "Пасажирські перевезення та оренда автобусів")}</small>
-            </span>
+            {/* Якщо завантажено логотип, назву в шапці не дублюємо */}
+            {!logo && (
+              <span className="brand__text">
+                <strong>{s("company_name", fbCompany)}</strong>
+                <small>{s("header_subtitle", "Пасажирські перевезення та оренда автобусів")}</small>
+              </span>
+            )}
           </a>
 
           <nav className="nav">
@@ -314,7 +317,7 @@ TELEGRAM_BOT_TOKEN=<токен від @BotFather>`}
               <p>Підберемо транспорт під кількість пасажирів і маршрут</p>
               <div className="hero__stat-grid">
                 <div className="hero__stat"><strong>{data.buses.length || 8}+</strong><span>моделей транспорту</span></div>
-                <div className="hero__stat"><strong>17–55</strong><span>пасажирських місць</span></div>
+                <div className="hero__stat"><strong>17-55</strong><span>пасажирських місць</span></div>
                 <div className="hero__stat"><strong>24/7</strong><span>прийом замовлень</span></div>
                 <div className="hero__stat"><strong>0 €</strong><span>вартість розрахунку</span></div>
               </div>
@@ -553,14 +556,14 @@ TELEGRAM_BOT_TOKEN=<токен від @BotFather>`}
                         <option value="">Оберіть транспорт або «не знаю»</option>
                         {data.buses.map((b) => (
                           <option key={b.id} value={`${b.name}${b.seats ? ` (${b.seats} місць)` : ""}`}>
-                            {b.name}{b.seats ? ` — ${b.seats} місць` : ""}
+                            {b.name}{b.seats ? ` - ${b.seats} місць` : ""}
                           </option>
                         ))}
                       </select>
                     </div>
                     <div className="field">
                       <label htmlFor="form-route">Маршрут</label>
-                      <input id="form-route" value={form.route} onChange={(e) => setForm({ ...form, route: e.target.value })} placeholder="Київ — Львів" />
+                      <input id="form-route" value={form.route} onChange={(e) => setForm({ ...form, route: e.target.value })} placeholder="Київ - Львів" />
                     </div>
                     <div className="field">
                       <label htmlFor="form-passengers">Кількість пасажирів</label>
@@ -732,10 +735,10 @@ TELEGRAM_BOT_TOKEN=<токен від @BotFather>`}
               </div>
 
               <div className="modal__specs">
-                <div className="modal__spec"><span>Тип</span><strong>{galleryBus.bus_type || "—"}</strong></div>
-                <div className="modal__spec"><span>Місць</span><strong>{galleryBus.seats || "—"}</strong></div>
-                <div className="modal__spec"><span>Рік</span><strong>{galleryBus.year || "—"}</strong></div>
-                <div className="modal__spec"><span>Марка</span><strong>{galleryBus.brand || "—"}</strong></div>
+                <div className="modal__spec"><span>Тип</span><strong>{galleryBus.bus_type || "-"}</strong></div>
+                <div className="modal__spec"><span>Місць</span><strong>{galleryBus.seats || "-"}</strong></div>
+                <div className="modal__spec"><span>Рік</span><strong>{galleryBus.year || "-"}</strong></div>
+                <div className="modal__spec"><span>Марка</span><strong>{galleryBus.brand || "-"}</strong></div>
               </div>
 
               {galleryBus.description && <p style={{ color: "#4a5b70" }}>{galleryBus.description}</p>}

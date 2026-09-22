@@ -4,7 +4,7 @@ import sql from "@/lib/db";
 export const dynamic = "force-dynamic";
 
 /**
- * Публічна перевірка стану (без секретів) — щоб після деплою одним запитом
+ * Публічна перевірка стану (без секретів) - щоб після деплою одним запитом
  * зрозуміти, чи все налаштовано:  GET /api/health
  */
 export async function GET() {

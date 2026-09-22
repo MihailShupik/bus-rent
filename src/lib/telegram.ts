@@ -176,17 +176,17 @@ export async function pollUpdates(): Promise<{ processed: number; actions: strin
 /* ------------------------------ commands -------------------------------- */
 const HELP_TEXT = [
   "<b>Команди бота</b>",
-  "/id — показати ваш Telegram ID",
-  "/leads — останні заявки з сайту (для адміністраторів)",
-  "/stats — статистика сайту (для адміністраторів)",
-  "/help — ця довідка",
+  "/id - показати ваш Telegram ID",
+  "/leads - останні заявки з сайту (для адміністраторів)",
+  "/stats - статистика сайту (для адміністраторів)",
+  "/help - ця довідка",
 ].join("\n");
 
 const START_TEXT = [
   "<b>Вітаю! Це бот заявок сайту оренди автобусів.</b>",
   "",
   "Сюди надходитимуть нові заявки з форми на сайті.",
-  "Щоб отримати свій Telegram ID — надішліть /id.",
+  "Щоб отримати свій Telegram ID - надішліть /id.",
 ].join("\n");
 
 async function adminOnlyText(): Promise<string> {
@@ -262,7 +262,7 @@ export async function handleTelegramUpdate(update: any): Promise<{ ok: boolean; 
     const body = rows
       .map((a: any, i: number) =>
         [
-          `<b>${i + 1}. ${escapeHtml(a.name)}</b> — ${escapeHtml(a.phone)}`,
+          `<b>${i + 1}. ${escapeHtml(a.name)}</b> - ${escapeHtml(a.phone)}`,
           a.bus ? `Транспорт: ${escapeHtml(a.bus)}` : "",
           a.route ? `Маршрут: ${escapeHtml(a.route)}` : "",
           a.message ? `Коментар: ${escapeHtml(a.message)}` : "",

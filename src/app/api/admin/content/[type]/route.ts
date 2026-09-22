@@ -63,7 +63,7 @@ const SCHEMAS: Record<string, TableSchema> = {
 function friendlyDbError(e: any): string {
   const msg = String(e?.message || "");
   if (e?.code === "23505" || msg.includes("duplicate key")) {
-    return "Такий запис уже існує — значення унікального поля вже зайняте (напр. Telegram ID або slug).";
+    return "Такий запис уже існує - значення унікального поля вже зайняте (напр. Telegram ID або slug).";
   }
   if (e?.code === "23502") return "Не заповнено обов'язкове поле.";
   if (msg.includes("invalid input syntax for type integer")) return "Очікується число.";

@@ -28,7 +28,7 @@ export async function ensureTelegramAdmins() {
  * value; existing keys are left untouched so the client's edits are never
  * overwritten. With `force` the default values are written over the current ones.
  *
- * Runs on every bootstrap, including databases that already have content — this
+ * Runs on every bootstrap, including databases that already have content - this
  * is how newly added admin fields reach an existing installation.
  */
 export async function ensureSettingsKeys(force = false) {

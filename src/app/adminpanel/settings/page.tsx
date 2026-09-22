@@ -9,7 +9,7 @@ const GROUPS: { title: string; defs: Def[] }[] = [
   {
     title: "Логотип і назва (брендінг)",
     defs: [
-      { key: "logo_image", label: "Логотип компанії", type: "image", hint: "PNG або SVG на прозорому фоні. Показується у шапці, футері та як іконка сайту. Якщо порожньо — використовується стандартна іконка автобуса" },
+      { key: "logo_image", label: "Логотип компанії", type: "image", hint: "PNG або SVG на прозорому фоні. Показується у шапці, футері та як іконка сайту. Якщо порожньо - використовується стандартна іконка автобуса" },
       { key: "company_name", label: "Назва компанії" },
       { key: "header_subtitle", label: "Підзаголовок у шапці" },
       { key: "working_hours", label: "Графік роботи" },
@@ -25,7 +25,7 @@ const GROUPS: { title: string; defs: Def[] }[] = [
       { key: "phone_raw2", label: "Телефон 2 (для посилання)" },
       { key: "viber_raw", label: "Viber номер (+380...)" },
       { key: "whatsapp_raw", label: "WhatsApp номер (380...)" },
-      { key: "telegram_username", label: "Telegram (нік або посилання)", hint: "напр. busrent або https://t.me/busrent — якщо порожньо, кнопка Telegram не показується" },
+      { key: "telegram_username", label: "Telegram (нік або посилання)", hint: "напр. busrent або https://t.me/busrent - якщо порожньо, кнопка Telegram не показується" },
       { key: "email", label: "Email" },
       { key: "address", label: "Адреса" },
     ],
@@ -36,11 +36,11 @@ const GROUPS: { title: string; defs: Def[] }[] = [
       { key: "hero_label", label: "Мітка над заголовком" },
       { key: "hero_title", label: "Заголовок" },
       { key: "hero_subtitle", label: "Підзаголовок", type: "textarea" },
-      { key: "hero_points", label: "Короткі переваги (кожен рядок — окремий пункт)", type: "list" },
+      { key: "hero_points", label: "Короткі переваги (кожен рядок - окремий пункт)", type: "list" },
       { key: "hero_button_primary", label: "Кнопка 1" },
       { key: "hero_button_whatsapp", label: "Кнопка WhatsApp" },
       { key: "hero_button_viber", label: "Кнопка Viber" },
-      { key: "hero_image", label: "Фонове зображення (необов'язково)", type: "image", hint: "Якщо не завантажено — використовується стандартне" },
+      { key: "hero_image", label: "Фонове зображення (необов'язково)", type: "image", hint: "Якщо не завантажено - використовується стандартне" },
     ],
   },
   {

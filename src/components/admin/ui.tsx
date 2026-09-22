@@ -299,7 +299,7 @@ export function PhotosManager({
       )}
 
       <small>
-        Рекомендуємо 5–10 фото на автобус: зовні, салон, місце водія, багажне відділення, додаткові.
+        Рекомендуємо 5-10 фото на автобус: зовні, салон, місце водія, багажне відділення, додаткові.
         Перше фото стає головним, якщо не обрано інше. Фото стискаються автоматично.
       </small>
     </div>
@@ -441,7 +441,7 @@ export function ResourceManager({ type, title, description, addLabel, fields, de
                   )}
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div className="a-row a-row--wrap" style={{ gap: 8 }}>
-                      <strong style={{ fontSize: 15.5 }}>{item[primaryKey] || "—"}</strong>
+                      <strong style={{ fontSize: 15.5 }}>{item[primaryKey] || "-"}</strong>
                       {item.active === false && <span className="a-badge a-badge--off">Приховано</span>}
                     </div>
                     {secondaryKey && <div className="a-muted" style={{ fontSize: 13, marginTop: 2 }}>{item[secondaryKey]}</div>}

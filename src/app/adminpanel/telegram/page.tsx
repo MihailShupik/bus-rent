@@ -76,7 +76,7 @@ export default function TelegramAdmin() {
           <h1>Telegram-бот</h1>
           <p>
             Бот надсилає заявки з сайту всім адміністраторам зі списку нижче. Адміністраторів можна додавати,
-            редагувати, приховувати та видаляти. Кожен адміністратор має один раз натиснути <b>Start</b> у боті —
+            редагувати, приховувати та видаляти. Кожен адміністратор має один раз натиснути <b>Start</b> у боті -
             інакше Telegram не дозволяє надсилати йому повідомлення.
           </p>
         </div>
@@ -87,7 +87,7 @@ export default function TelegramAdmin() {
       <div className="a-grid a-grid--stats" style={{ marginBottom: 18 }}>
         <div className="a-stat">
           <span className="a-stat__icon"><Icon name="send" size={22} /></span>
-          <strong style={{ fontSize: 18 }}>{bot ? bot.first_name || "Бот" : "—"}</strong>
+          <strong style={{ fontSize: 18 }}>{bot ? bot.first_name || "Бот" : "-"}</strong>
           <span>{bot?.username ? "@" + bot.username : "не підключено"}</span>
           <div style={{ marginTop: 8 }}>
             {status?.configured
@@ -130,7 +130,7 @@ export default function TelegramAdmin() {
 
       {status?.autoWebhook?.ok && (
         <div className="a-hint" style={{ marginBottom: 18 }}>
-          <b>Webhook підключено автоматично.</b> Зареєстровано адресу <code>{status.autoWebhook.url}</code> —
+          <b>Webhook підключено автоматично.</b> Зареєстровано адресу <code>{status.autoWebhook.url}</code> -
           команди бота вже працюють. Більше нічого робити не потрібно.
         </div>
       )}
@@ -184,9 +184,9 @@ export default function TelegramAdmin() {
             {testResults.map((r) => (
               <div key={r.id} className="a-row a-row--wrap" style={{ gap: 8, padding: "6px 0", fontSize: 13.5 }}>
                 <span className={`a-badge ${r.ok ? "a-badge--on" : "a-badge--off"}`}>{r.ok ? "доставлено" : "не доставлено"}</span>
-                <strong>{r.name || "—"}</strong>
+                <strong>{r.name || "-"}</strong>
                 <span className="a-muted">{r.id}</span>
-                {!r.ok && <span className="a-muted">— {r.error}. Хай адміністратор натисне Start у боті.</span>}
+                {!r.ok && <span className="a-muted">- {r.error}. Хай адміністратор натисне Start у боті.</span>}
               </div>
             ))}
           </div>
@@ -212,7 +212,7 @@ export default function TelegramAdmin() {
 
         {status?.tokenFromEnv && (
           <div className="a-hint" style={{ marginTop: 14 }}>
-            Токен задано змінною середовища <strong>TELEGRAM_BOT_TOKEN</strong> — він має приоритет і змінюється на хостингу.
+            Токен задано змінною середовища <strong>TELEGRAM_BOT_TOKEN</strong> - він має приоритет і змінюється на хостингу.
           </div>
         )}
       </div>
@@ -222,9 +222,9 @@ export default function TelegramAdmin() {
         <h3 style={{ fontSize: 16, marginBottom: 10 }}>Як додати адміністратора</h3>
         <ol style={{ margin: 0, paddingLeft: 20, fontSize: 14, lineHeight: 1.9, color: "#33475e" }}>
           <li>Адміністратор відкриває бота <b>@bussite_bot</b> і натискає <b>Start</b>.</li>
-          <li>Надсилає команду <code>/id</code> — бот відповідає його Telegram ID.</li>
+          <li>Надсилає команду <code>/id</code> - бот відповідає його Telegram ID.</li>
           <li>Тут, у списку нижче, натискаємо <b>«Додати адміністратора»</b> і вписуємо ім’я та цей ID.</li>
-          <li>Натискаємо «Надіслати тест усім адмінам» — перевіряємо, що повідомлення дійшло.</li>
+          <li>Натискаємо «Надіслати тест усім адмінам» - перевіряємо, що повідомлення дійшло.</li>
         </ol>
       </div>
 

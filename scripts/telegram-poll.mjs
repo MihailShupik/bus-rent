@@ -2,7 +2,7 @@
 /**
  * Локальний «polling» для Telegram-бота (коли немає публічного HTTPS).
  *
- * На продакшені (Vercel) використовується webhook — кнопка в адмінці.
+ * На продакшені (Vercel) використовується webhook - кнопка в адмінці.
  * Локально цей скрипт кожні 2 секунди забирає апдейти в Telegram і передає їх
  * у той самий обробник, що й webhook, тож команди /start, /id, /leads, /stats
  * працюють і на локальній машині.
@@ -11,8 +11,8 @@
  *   node scripts/telegram-poll.mjs
  *
  * Змінні (за замовчуванням беруться з .env.local або зі стандартних значень):
- *   SITE_URL   — адреса сайту (типово http://localhost:3000)
- *   ADMIN_EMAIL, ADMIN_PASSWORD — доступ до адмінки
+ *   SITE_URL   - адреса сайту (типово http://localhost:3000)
+ *   ADMIN_EMAIL, ADMIN_PASSWORD - доступ до адмінки
  */
 import { readFileSync, existsSync } from "node:fs";
 import { dirname, join } from "node:path";

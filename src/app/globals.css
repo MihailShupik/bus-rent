@@ -37,7 +37,7 @@ button { font: inherit; cursor: pointer; }
 input, select, textarea { font: inherit; }
 h1, h2, h3, h4 { line-height: 1.18; font-weight: 800; letter-spacing: -0.02em; }
 
-.container { width: 100%; max-width: var(--max); margin: 0 auto; padding: 0 20px; }
+.container { width: 100%; max-width: var(--max); margin: 0 auto; padding-inline: 20px; }
 .section { padding: 84px 0; position: relative; }
 .section--tight { padding: 60px 0; }
 .section--alt { background: #fff; }
@@ -479,13 +479,13 @@ h1, h2, h3, h4 { line-height: 1.18; font-weight: 800; letter-spacing: -0.02em; }
   .brand__text strong { font-size: 15.5px; }
   .brand__text small { font-size: 10.5px; }
   .header__row { gap: 8px; }
-  .container { padding: 0 13px; }
+  .container { padding-inline: 13px; }
   .hero h1 { font-size: clamp(22px, 7vw, 30px); }
   .btn { padding: 9px 13px; font-size: 13px; }
   .btn--lg { padding: 10px 14px; font-size: 13.5px; }
 }
 @media (max-width: 620px) {
-  /* на телефоні — одна кнопка, решта розкриваються */
+  /* на телефоні - одна кнопка, решта розкриваються */
   .floating__toggle { display: grid; }
   .floating a, .floating button:not(.floating__toggle) { display: none; }
   .floating--open a, .floating--open button:not(.floating__toggle) { display: grid; }
@@ -497,8 +497,8 @@ h1, h2, h3, h4 { line-height: 1.18; font-weight: 800; letter-spacing: -0.02em; }
   .hero h1 { font-size: clamp(24px, 7.4vw, 34px); }
   .section { padding: 52px 0; }
   .section-head { margin-bottom: 30px; }
-  .container { padding: 0 16px; }
-  /* на телефоне — компактная чистая шапка: логотип + назва + дзвінок + меню */
+  .container { padding-inline: 16px; }
+  /* на телефоне - компактная чистая шапка: логотип + назва + дзвінок + меню */
   .header__row { gap: 8px; padding-block: 8px; }
   .brand__text small { display: none; }
   .brand__text strong { font-size: 17.5px; }

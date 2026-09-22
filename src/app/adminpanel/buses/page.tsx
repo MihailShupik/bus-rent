@@ -23,7 +23,7 @@ const fields: FieldDef[] = [
   },
   { key: "description", label: "Короткий опис", type: "textarea", span: true, placeholder: "Комфортабельний мікроавтобус для туристичних і корпоративних поїздок." },
   { key: "specs", label: "Характеристики", type: "list", placeholder: "Кондиціонер", span: true },
-  { key: "rental_terms", label: "Умови оренди", type: "textarea", span: true, placeholder: "Мінімальне замовлення — 3 години." },
+  { key: "rental_terms", label: "Умови оренди", type: "textarea", span: true, placeholder: "Мінімальне замовлення - 3 години." },
   { key: "sort_order", label: "Порядок відображення", type: "number" },
   { key: "active", label: "Показувати на сайті", type: "bool" },
 ];

@@ -15,7 +15,7 @@ export default function AdvantagesAdmin() {
     <ResourceManager
       type="advantages"
       title="Переваги"
-      description="Блок «Чому обирають нас». Кількість переваг не обмежена — додавайте, редагуйте, змінюйте порядок."
+      description="Блок «Чому обирають нас». Кількість переваг не обмежена - додавайте, редагуйте, змінюйте порядок."
       addLabel="Додати перевагу"
       fields={fields}
       primaryKey="title"
