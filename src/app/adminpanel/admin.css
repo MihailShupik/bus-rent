@@ -166,6 +166,18 @@
 .a-error { background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; border-radius: 10px; padding: 11px 14px; font-size: 13.5px; margin-bottom: 14px; font-weight: 600; }
 .a-hint { background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af; border-radius: 10px; padding: 11px 14px; font-size: 12.5px; margin-top: 16px; line-height: 1.5; }
 
+/* адаптивные двухколоночные раскладки (напр. «Конструктор блоків») */
+.a-split { display: grid; grid-template-columns: 290px 1fr; gap: 18px; align-items: start; }
+.a-fieldrow { display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 10px; align-items: end; padding: 12px; }
+@media (max-width: 900px) {
+  .a-split { grid-template-columns: 1fr; }
+  .a-fieldrow { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 560px) {
+  .a-fieldrow { grid-template-columns: 1fr; }
+  .a-photos { grid-template-columns: repeat(auto-fill, minmax(min(110px, 100%), 1fr)); }
+}
+
 @media (max-width: 1000px) {
   .a-side { transform: translateX(-100%); }
   .a-side.open { transform: translateX(0); }

@@ -171,7 +171,7 @@ export default function BuilderAdmin() {
         <button className="a-btn a-btn--primary" onClick={() => setEditType(emptyType())}><IconPlus size={16} /> Створити тип блоку</button>
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "290px 1fr", gap: 18, alignItems: "start" }}>
+      <div className="a-split">
         {/* types list */}
         <div className="a-card" style={{ padding: 12 }}>
           <div className="a-muted" style={{ fontSize: 12, textTransform: "uppercase", letterSpacing: "0.06em", padding: "6px 8px" }}>Типи блоків</div>
@@ -289,7 +289,7 @@ export default function BuilderAdmin() {
             </div>
             <div className="a-grid" style={{ gap: 10 }}>
               {editType.fields.map((f, i) => (
-                <div className="a-card" key={i} style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr auto", gap: 10, alignItems: "end", padding: 12 }}>
+                <div className="a-card a-fieldrow" key={i}>
                   <div className="a-field" style={{ marginBottom: 0 }}>
                     <label>Ключ</label>
                     <input value={f.key} onChange={(e) => updateField(i, { key: fieldKey(e.target.value) })} />

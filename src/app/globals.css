@@ -243,7 +243,7 @@ h1, h2, h3, h4 { line-height: 1.18; font-weight: 800; letter-spacing: -0.02em; }
 .about-badge span { font-size: 12.5px; color: var(--muted); display: block; }
 
 /* ---------------------------------- Buses ----------------------------------- */
-.buses-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 26px; }
+.buses-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(330px, 100%), 1fr)); gap: 26px; }
 .bus-card {
   background: #fff; border-radius: 22px; overflow: hidden; border: 1px solid var(--line);
   box-shadow: var(--shadow-sm); display: flex; flex-direction: column;
@@ -323,7 +323,7 @@ h1, h2, h3, h4 { line-height: 1.18; font-weight: 800; letter-spacing: -0.02em; }
 .gallery__thumb img { width: 100%; height: 100%; object-fit: cover; }
 .gallery__thumb--active { border-color: var(--accent); opacity: 1; }
 .modal__body { padding: 26px; }
-.modal__specs { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; margin: 18px 0; }
+.modal__specs { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(160px, 100%), 1fr)); gap: 12px; margin: 18px 0; }
 .modal__spec {
   background: #f7f9fc; border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px;
 }
@@ -331,7 +331,7 @@ h1, h2, h3, h4 { line-height: 1.18; font-weight: 800; letter-spacing: -0.02em; }
 .modal__spec strong { font-size: 15px; }
 
 /* -------------------------------- Services ---------------------------------- */
-.cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 22px; }
+.cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr)); gap: 22px; }
 .service-card {
   background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 26px;
   box-shadow: var(--shadow-sm); transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
@@ -347,7 +347,7 @@ h1, h2, h3, h4 { line-height: 1.18; font-weight: 800; letter-spacing: -0.02em; }
 .service-card__media img { width: 100%; height: 100%; object-fit: cover; }
 
 /* ------------------------------- Advantages --------------------------------- */
-.adv-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 20px; }
+.adv-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(270px, 100%), 1fr)); gap: 20px; }
 .adv-card {
   background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 24px;
   display: flex; gap: 16px; align-items: flex-start; box-shadow: var(--shadow-sm);
@@ -362,7 +362,7 @@ h1, h2, h3, h4 { line-height: 1.18; font-weight: 800; letter-spacing: -0.02em; }
 .adv-card p { font-size: 14px; color: var(--muted); }
 
 /* --------------------------------- Steps ------------------------------------ */
-.steps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 22px; counter-reset: step; }
+.steps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(230px, 100%), 1fr)); gap: 22px; counter-reset: step; }
 .step-card {
   position: relative; background: #fff; border: 1px solid var(--line); border-radius: var(--radius);
   padding: 28px 24px 24px; box-shadow: var(--shadow-sm); transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -378,7 +378,7 @@ h1, h2, h3, h4 { line-height: 1.18; font-weight: 800; letter-spacing: -0.02em; }
 .step-card p { font-size: 14px; color: var(--muted); }
 
 /* -------------------------------- Contacts ---------------------------------- */
-.contacts-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; margin-top: 34px; }
+.contacts-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(240px, 100%), 1fr)); gap: 20px; margin-top: 34px; }
 .contact-card {
   background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 24px;
   box-shadow: var(--shadow-sm); transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -415,16 +415,21 @@ h1, h2, h3, h4 { line-height: 1.18; font-weight: 800; letter-spacing: -0.02em; }
 
 /* ------------------------------ Floating actions ---------------------------- */
 .floating { position: fixed; right: 18px; bottom: 18px; z-index: 80; display: flex; flex-direction: column; gap: 10px; }
-.floating a {
+.floating a, .floating button {
   width: 48px; height: 48px; border-radius: 50%; display: grid; place-items: center;
-  box-shadow: var(--shadow); transition: transform 0.2s ease;
+  box-shadow: var(--shadow); transition: transform 0.2s ease; border: none; padding: 0;
 }
-.floating a:hover { transform: scale(1.08); }
+.floating a:hover, .floating button:hover { transform: scale(1.08); }
 .floating__wa { background: #25d366; }
 .floating__viber { background: #7360f2; }
 .floating__tg { background: #229ED9; }
 .floating__call { background: var(--accent); }
-.floating__top { background: var(--navy); }
+.floating__top {
+  background: rgba(13, 33, 55, 0.82);
+  border: 1.5px solid rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+}
+.floating__top:hover { background: rgba(13, 33, 55, 0.95); }
 
 /* --------------------------------- Reveal ----------------------------------- */
 .reveal { opacity: 0; transform: translateY(26px); transition: opacity 0.6s ease, transform 0.6s ease; }
@@ -455,6 +460,23 @@ h1, h2, h3, h4 { line-height: 1.18; font-weight: 800; letter-spacing: -0.02em; }
   .section { padding: 62px 0; }
   .hero__inner { padding: 54px 0 64px; }
 }
+@media (max-width: 400px) {
+  /* бренд має вміти стискатися, інакше шапка переповнює вузький екран */
+  .brand { flex: 0 1 auto; min-width: 0; }
+  .brand__text { min-width: 0; overflow: hidden; }
+  .brand__text strong, .brand__text small {
+    display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .brand__mark { width: 36px; height: 36px; border-radius: 11px; }
+  .brand__mark--logo { height: 36px; max-width: 104px; padding: 3px 6px; }
+  .brand__text strong { font-size: 15.5px; }
+  .brand__text small { font-size: 10.5px; }
+  .header__row { gap: 8px; }
+  .container { padding: 0 13px; }
+  .hero h1 { font-size: clamp(22px, 7vw, 30px); }
+  .btn { padding: 9px 13px; font-size: 13px; }
+  .btn--lg { padding: 10px 14px; font-size: 13.5px; }
+}
 @media (max-width: 620px) {
   .form-grid, .stats, .hero__points { grid-template-columns: 1fr; }
   .btn { padding: 10px 15px; font-size: 13.5px; }
@@ -474,6 +496,6 @@ h1, h2, h3, h4 { line-height: 1.18; font-weight: 800; letter-spacing: -0.02em; }
   .modal__body { padding: 18px; }
   .section-title { font-size: 25px; }
   .floating { right: 12px; bottom: 12px; }
-  .floating a { width: 44px; height: 44px; }
+  .floating a, .floating button { width: 44px; height: 44px; }
   .floating { gap: 8px; }
 }
