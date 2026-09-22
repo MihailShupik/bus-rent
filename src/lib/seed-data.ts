@@ -13,6 +13,7 @@ export const defaultSettings: Record<string, string> = {
   phone_raw2: "+380671234567",
   viber_raw: "+380441234567",
   whatsapp_raw: "380441234567",
+  telegram_username: "",
   email: "info@bus-rent.ua",
   address: "м. Київ, вул. Транспортна, 12",
   working_hours: "Працюємо 24/7",

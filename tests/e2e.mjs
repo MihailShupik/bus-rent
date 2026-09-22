@@ -27,6 +27,7 @@ fs.mkdirSync(OUT, { recursive: true });
 
 
 
+
 const errors = [];
 const results = [];
 const ok = (name, cond, extra = "") => {
@@ -317,6 +318,12 @@ const desc = await l.locator('meta[name="description"]').first().getAttribute("c
 ok("landing: meta description present", !!desc && desc.length > 30, String(desc).slice(0, 50));
 const ogTitle = await l.locator('meta[property="og:title"]').first().getAttribute("content").catch(() => null);
 ok("landing: open graph tags present", !!ogTitle, String(ogTitle));
+const tgLinks = await l.locator('a[href*="t.me"]').count();
+ok("landing: Telegram contact rendered", tgLinks > 0, "t.me links=" + tgLinks);
+const waLinks = await l.locator('a[href*="wa.me"]').count();
+const vbLinks = await l.locator('a[href*="viber://"]').count();
+const telLinks = await l.locator('a[href^="tel:"]').count();
+ok("landing: WhatsApp / Viber / phone quick buttons", waLinks > 0 && vbLinks > 0 && telLinks > 0, `wa=${waLinks} viber=${vbLinks} tel=${telLinks}`);
 await l.screenshot({ path: `${OUT}/23-landing-logo.png` });
 await l.context().close();
 

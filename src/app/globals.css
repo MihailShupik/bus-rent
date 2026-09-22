@@ -73,6 +73,7 @@ h1, h2, h3, h4 { line-height: 1.18; font-weight: 800; letter-spacing: -0.02em; }
 .btn--ghost:hover { background: rgba(255, 255, 255, 0.22); }
 .btn--wa { background: #25d366; color: #fff; box-shadow: 0 10px 24px rgba(37, 211, 102, 0.3); }
 .btn--viber { background: #7360f2; color: #fff; box-shadow: 0 10px 24px rgba(115, 96, 242, 0.3); }
+.btn--tg { background: #229ED9; color: #fff; box-shadow: 0 10px 24px rgba(34, 158, 217, 0.3); }
 .btn--outline { background: #fff; color: var(--navy); border: 1.5px solid var(--line); }
 .btn--outline:hover { border-color: var(--accent); color: var(--accent); }
 .btn--lg { padding: 16px 30px; font-size: 16px; }
@@ -417,6 +418,7 @@ h1, h2, h3, h4 { line-height: 1.18; font-weight: 800; letter-spacing: -0.02em; }
 .floating a:hover { transform: scale(1.08); }
 .floating__wa { background: #25d366; }
 .floating__viber { background: #7360f2; }
+.floating__tg { background: #229ED9; }
 .floating__call { background: var(--accent); }
 .floating__top { background: var(--navy); }
 

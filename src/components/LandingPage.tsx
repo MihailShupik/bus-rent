@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   Icon, IconArrowRight, IconBus, IconCheck, IconClose, IconMail, IconMapPin,
-  IconMenu, IconPhone, IconSeat, IconSend, IconStar, IconSteering, IconViber, IconWhatsApp,
+  IconMenu, IconPhone, IconSeat, IconSend, IconStar, IconSteering, IconTelegram, IconViber, IconWhatsApp,
 } from "@/components/icons";
 import { companyName as fbCompany, contacts as fbContacts, navItems } from "@/config/site";
 import type { SiteData } from "@/lib/content";
@@ -30,6 +30,7 @@ function BrandMark({ logo, size = 26, badge = false }: { logo?: string; size?: n
 export default function LandingPage({ initialData }: Props) {
   const [data, setData] = useState<SiteData>(initialData || emptyData);
   const [ready, setReady] = useState(!!initialData);
+  const [loadError, setLoadError] = useState("");
   const [drawer, setDrawer] = useState(false);
   const [galleryBus, setGalleryBus] = useState<any | null>(null);
   const [activePhoto, setActivePhoto] = useState(0);
@@ -48,8 +49,11 @@ export default function LandingPage({ initialData }: Props) {
     }
     fetch("/api/content")
       .then((r) => r.json())
-      .then((d) => { if (d && !d.error) setData(d); })
-      .catch(() => {})
+      .then((d) => {
+        if (d && !d.error) setData(d);
+        else setLoadError(d?.error || "Не вдалося завантажити дані сайту");
+      })
+      .catch((e) => setLoadError(String(e?.message || e)))
       .finally(() => setReady(true));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -74,6 +78,13 @@ export default function LandingPage({ initialData }: Props) {
 
   const s = (key: string, fallback: string) => data.settings?.[key] || fallback;
   const logo = data.settings?.logo_image || "";
+  /** Telegram: приймає нік (@name), «name» або повне посилання. Порожньо → кнопки немає. */
+  const tgLink = (raw: string) => {
+    const v = (raw || "").trim();
+    if (!v) return "";
+    if (/^https?:\/\//i.test(v)) return v;
+    return `https://t.me/${v.replace(/^@/, "")}`;
+  };
 
   const contacts = {
     phoneDisplay: s("phone_display", fbContacts.phoneDisplay),
@@ -86,6 +97,7 @@ export default function LandingPage({ initialData }: Props) {
     address: s("address", fbContacts.address),
     workingHours: s("working_hours", fbContacts.workingHours),
     area: s("area", fbContacts.area),
+    telegram: s("telegram_username", ""),
   };
   const links = {
     phone: `tel:${contacts.phoneRaw}`,
@@ -93,6 +105,7 @@ export default function LandingPage({ initialData }: Props) {
     viber: `viber://chat?number=${encodeURIComponent(contacts.viberRaw)}`,
     whatsapp: `https://wa.me/${contacts.whatsappRaw.replace(/[^0-9]/g, "")}`,
     email: `mailto:${contacts.email}`,
+    telegram: tgLink(contacts.telegram),
   };
 
   const heroPoints: string[] = useMemo(() => {
@@ -174,6 +187,33 @@ export default function LandingPage({ initialData }: Props) {
   const money = (v: string) => (v || "").toString();
   const priceUnit = (u: string) => normalizePriceUnit(u);
 
+  if (ready && loadError && !data.buses.length && !data.services.length) {
+    return (
+      <div style={{ display: "grid", placeItems: "center", minHeight: "100vh", background: "#f5f7fb", padding: 24 }}>
+        <div style={{ maxWidth: 620, background: "#fff", borderRadius: 18, padding: 30, boxShadow: "0 12px 34px rgba(16,35,58,.1)", border: "1px solid #e4e9f0" }}>
+          <h1 style={{ fontSize: 22, marginBottom: 10 }}>Сайт не підключено до бази даних</h1>
+          <p style={{ color: "#5b6b7f", marginBottom: 16 }}>
+            Застосунок працює, але не бачить базу. Додайте змінні середовища у налаштуваннях
+            проєкту на хостингу (Vercel → Settings → Environment Variables) і зробіть Redeploy:
+          </p>
+          <pre style={{ background: "#0d2137", color: "#e6eef7", padding: 16, borderRadius: 12, fontSize: 13, overflowX: "auto", lineHeight: 1.7 }}>
+{`DATABASE_URL=postgresql://...neon.tech/neondb?sslmode=require
+JWT_SECRET=<довільний довгий рядок>
+ADMIN_EMAIL=admin@bus-rent.ua
+ADMIN_PASSWORD=<ваш пароль>
+TELEGRAM_BOT_TOKEN=<токен від @BotFather>`}
+          </pre>
+          <p style={{ color: "#5b6b7f", fontSize: 13, marginTop: 14 }}>
+            Технічна деталь: <code>{loadError}</code>
+          </p>
+          <p style={{ color: "#5b6b7f", fontSize: 13, marginTop: 6 }}>
+            Після додавання змінних перший запит сам створить таблиці й наповнить базу.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   if (!ready) {
     return (
       <div style={{ display: "grid", placeItems: "center", minHeight: "100vh", background: "#fff" }}>
@@ -241,6 +281,7 @@ export default function LandingPage({ initialData }: Props) {
             <a className="btn btn--accent btn--block" href={links.phone}><IconPhone size={18} /> {contacts.phoneDisplay}</a>
             <a className="btn btn--wa btn--block" href={links.whatsapp} target="_blank" rel="noreferrer"><IconWhatsApp size={20} /> WhatsApp</a>
             <a className="btn btn--viber btn--block" href={links.viber} target="_blank" rel="noreferrer"><IconViber size={20} /> Viber</a>
+            {links.telegram && <a className="btn btn--tg btn--block" href={links.telegram} target="_blank" rel="noreferrer"><IconTelegram size={20} /> Telegram</a>}
             <button className="btn btn--navy btn--block" onClick={() => goToForm()}>Замовити перевезення</button>
           </div>
         </div>
@@ -270,6 +311,11 @@ export default function LandingPage({ initialData }: Props) {
                 <a className="btn btn--viber btn--lg" href={links.viber} target="_blank" rel="noreferrer" onClick={() => track("click_viber")}>
                   <IconViber size={20} /> {s("hero_button_viber", "Viber")}
                 </a>
+                {links.telegram && (
+                  <a className="btn btn--tg btn--lg" href={links.telegram} target="_blank" rel="noreferrer" onClick={() => track("click_telegram")}>
+                    <IconTelegram size={20} /> Telegram
+                  </a>
+                )}
               </div>
               <ul className="hero__points">
                 {heroPoints.map((p) => <li key={p}><IconCheck size={18} /> {p}</li>)}
@@ -571,6 +617,13 @@ export default function LandingPage({ initialData }: Props) {
                 <span>Адреса</span>
                 <strong>{contacts.address}</strong>
               </div>
+              {links.telegram && (
+                <div className="contact-card reveal">
+                  <div className="contact-card__icon"><IconTelegram size={24} /></div>
+                  <span>Telegram</span>
+                  <strong><a href={links.telegram} target="_blank" rel="noreferrer" onClick={() => track("click_telegram")}>{contacts.telegram.replace(/^https?:\/\//i, "").replace(/^@/, "")}</a></strong>
+                </div>
+              )}
               <div className="contact-card reveal">
                 <div className="contact-card__icon"><IconStar size={24} /></div>
                 <span>Режим роботи</span>
@@ -581,6 +634,7 @@ export default function LandingPage({ initialData }: Props) {
             <div style={{ display: "flex", gap: 12, flexWrap: "wrap", marginTop: 26, justifyContent: "center" }}>
               <a className="btn btn--wa btn--lg" href={links.whatsapp} target="_blank" rel="noreferrer"><IconWhatsApp size={20} /> WhatsApp</a>
               <a className="btn btn--viber btn--lg" href={links.viber} target="_blank" rel="noreferrer"><IconViber size={20} /> Viber</a>
+              {links.telegram && <a className="btn btn--tg btn--lg" href={links.telegram} target="_blank" rel="noreferrer"><IconTelegram size={20} /> Telegram</a>}
               <button className="btn btn--accent btn--lg" onClick={() => goToForm()}>Замовити перевезення</button>
             </div>
           </div>
@@ -603,6 +657,7 @@ export default function LandingPage({ initialData }: Props) {
               <div className="footer__social">
                 <a href={links.whatsapp} target="_blank" rel="noreferrer" aria-label="WhatsApp"><IconWhatsApp size={22} /></a>
                 <a href={links.viber} target="_blank" rel="noreferrer" aria-label="Viber"><IconViber size={22} /></a>
+                {links.telegram && <a href={links.telegram} target="_blank" rel="noreferrer" aria-label="Telegram"><IconTelegram size={22} /></a>}
                 <a href={links.phone} aria-label="Телефон"><IconPhone size={20} /></a>
               </div>
             </div>
@@ -633,6 +688,7 @@ export default function LandingPage({ initialData }: Props) {
       <div className="floating">
         <a className="floating__wa" href={links.whatsapp} target="_blank" rel="noreferrer" aria-label="WhatsApp" onClick={() => track("click_whatsapp")}><IconWhatsApp size={26} /></a>
         <a className="floating__viber" href={links.viber} target="_blank" rel="noreferrer" aria-label="Viber" onClick={() => track("click_viber")}><IconViber size={26} /></a>
+        {links.telegram && <a className="floating__tg" href={links.telegram} target="_blank" rel="noreferrer" aria-label="Telegram" onClick={() => track("click_telegram")}><IconTelegram size={26} /></a>}
         <a className="floating__call" href={links.phone} aria-label="Подзвонити" onClick={() => track("click_phone")}><IconPhone size={24} /></a>
         <button className="floating__top" aria-label="Догори" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} style={{ border: "none" }}>
           <span style={{ color: "#fff", display: "grid", placeItems: "center" }}><Icon name="arrow" size={22} /></span>

@@ -25,6 +25,7 @@ const GROUPS: { title: string; defs: Def[] }[] = [
       { key: "phone_raw2", label: "Телефон 2 (для посилання)" },
       { key: "viber_raw", label: "Viber номер (+380...)" },
       { key: "whatsapp_raw", label: "WhatsApp номер (380...)" },
+      { key: "telegram_username", label: "Telegram (нік або посилання)", hint: "напр. busrent або https://t.me/busrent — якщо порожньо, кнопка Telegram не показується" },
       { key: "email", label: "Email" },
       { key: "address", label: "Адреса" },
     ],

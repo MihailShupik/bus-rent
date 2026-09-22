@@ -51,6 +51,25 @@ for key in "${REQUIRED[@]}"; do
   fi
 done
 
+# --- перевірка прав токена (щоб не падати незрозумілою помилкою) -----------
+echo "→ Перевіряю токен і права..."
+USER_JSON="$(curl -s -H "Authorization: Bearer $TOKEN" https://api.vercel.com/v2/user)"
+if ! printf '%s' "$USER_JSON" | grep -q '"user"'; then
+  echo "Помилка: токен недійсний або прострочений."
+  exit 1
+fi
+SCOPE_USER="$(printf '%s' "$USER_JSON" | python3 -c 'import sys,json;u=json.load(sys.stdin)["user"];print(u.get("username",""))' 2>/dev/null || echo "")"
+PROBE="$(curl -s -o /dev/null -w '%{http_code}' -X POST -H "Authorization: Bearer $TOKEN" -H 'Content-Type: application/json' \
+  https://api.vercel.com/v11/projects -d '{"name":"bus-rent-permission-probe"}')"
+if [ "$PROBE" = "403" ]; then
+  echo "Помилка: у токена немає прав на створення проєктів (HTTP 403)."
+  echo "Потрібен токен зі скоупом «Full Account»:"
+  echo "  vercel.com → Settings → Tokens → Create Token → Scope: Full Account"
+  echo "Або задеплойте через інтерфейс: vercel.com/new → Import Git Repository."
+  exit 1
+fi
+echo "  токен дійсний (акаунт: $SCOPE_USER, probe HTTP $PROBE)"
+
 echo "→ Підключаю проєкт $PROJECT..."
 npx --yes vercel@latest link --yes --project "$PROJECT" --token "$TOKEN" >/dev/null
 
