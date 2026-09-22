@@ -3,7 +3,7 @@ import { requireAuth } from "@/lib/auth";
 import { ensureSchema } from "@/lib/schema";
 import {
   deleteWebhook, ensureWebhookSecret, getBotInfo, getWebhookInfo, hasBotToken,
-  listBotAdmins, sendMessage, setWebhook,
+  listBotAdmins, pollUpdates, sendMessage, setWebhook,
 } from "@/lib/telegram";
 import sql from "@/lib/db";
 
@@ -94,6 +94,11 @@ export async function POST(request: Request) {
       }
       const delivered = results.filter((r) => r.ok).length;
       return NextResponse.json({ success: delivered > 0, results, delivered, total: results.length });
+    }
+
+    if (action === "poll") {
+      const result = await pollUpdates();
+      return NextResponse.json({ success: !result.error, ...result });
     }
 
     return NextResponse.json({ error: "Невідома дія" }, { status: 400 });

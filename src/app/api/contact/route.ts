@@ -65,7 +65,18 @@ export async function POST(request: Request) {
 
     // Notify every registered bot administrator (site_settings token or env).
     try {
-      await notifyAdmins(formatLead({ name, phone, email, bus, route, passengers, message }));
+      const deliveries = await notifyAdmins(formatLead({ name, phone, email, bus, route, passengers, message }));
+      if (deliveries.length) {
+        const ok = deliveries.filter((d) => d.ok).length;
+        const failed = deliveries.filter((d) => !d.ok);
+        console.log(`Telegram: заявку доставлено ${ok}/${deliveries.length} адміністраторам`);
+        if (failed.length) {
+          console.warn(
+            "Telegram: не доставлено —",
+            failed.map((f) => `${f.name || f.id} (${f.error})`).join(", ")
+          );
+        }
+      }
     } catch (tgError) {
       console.error("Telegram admins notify error:", tgError);
     }

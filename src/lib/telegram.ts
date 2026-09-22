@@ -138,6 +138,41 @@ export async function ensureWebhookSecret(): Promise<string> {
   return secret;
 }
 
+/* ------------------------------- polling -------------------------------- */
+/**
+ * Local-development alternative to the webhook: pulls pending updates from
+ * Telegram and processes them with the same handler. The offset is persisted so
+ * updates are never handled twice.
+ */
+export async function pollUpdates(): Promise<{ processed: number; actions: string[]; error?: string }> {
+  const offsetRow = await sql(`SELECT value FROM site_settings WHERE key = 'telegram_update_offset'`);
+  const offset = parseInt(offsetRow[0]?.value || "0", 10) || 0;
+
+  const res = await tg("getUpdates", {
+    offset,
+    timeout: 0,
+    allowed_updates: ["message", "edited_message", "callback_query"],
+  });
+  if (!res.ok) return { processed: 0, actions: [], error: res.description || "getUpdates failed" };
+
+  const updates: any[] = res.result || [];
+  const actions: string[] = [];
+  let next = offset;
+  for (const u of updates) {
+    const r = await handleTelegramUpdate(u);
+    if (r.action) actions.push(r.action);
+    next = Math.max(next, (u.update_id || 0) + 1);
+  }
+  if (next !== offset) {
+    await sql(
+      `INSERT INTO site_settings (key, value) VALUES ('telegram_update_offset', $1)
+       ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value, updated_at = NOW()`,
+      [String(next)]
+    );
+  }
+  return { processed: updates.length, actions };
+}
+
 /* ------------------------------ commands -------------------------------- */
 const HELP_TEXT = [
   "<b>Команди бота</b>",
