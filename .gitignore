@@ -1,7 +1,8 @@
 node_modules
 .next
-.env
-.env.local
+# все локальные env-файлы с секретами, кроме примера
+.env*
+!.env.example
 *.log
 .DS_Store
 next-env.d.ts
