@@ -139,6 +139,7 @@ h1, h2, h3, h4 { line-height: 1.18; font-weight: 800; letter-spacing: -0.02em; }
 }
 .drawer__panel a:hover { background: var(--bg); color: var(--accent); }
 @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
+@keyframes fabIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 
 /* ----------------------------------- Hero ----------------------------------- */
 .hero { position: relative; background: var(--navy); color: #fff; overflow: hidden; }
@@ -415,11 +416,11 @@ h1, h2, h3, h4 { line-height: 1.18; font-weight: 800; letter-spacing: -0.02em; }
 
 /* ------------------------------ Floating actions ---------------------------- */
 .floating { position: fixed; right: 18px; bottom: 18px; z-index: 80; display: flex; flex-direction: column; gap: 10px; }
-.floating a, .floating button {
+.floating a, .floating button:not(.floating__toggle) {
   width: 48px; height: 48px; border-radius: 50%; display: grid; place-items: center;
   box-shadow: var(--shadow); transition: transform 0.2s ease; border: none; padding: 0;
 }
-.floating a:hover, .floating button:hover { transform: scale(1.08); }
+.floating a:hover, .floating button:not(.floating__toggle):hover { transform: scale(1.08); }
 .floating__wa { background: #25d366; }
 .floating__viber { background: #7360f2; }
 .floating__tg { background: #229ED9; }
@@ -430,6 +431,11 @@ h1, h2, h3, h4 { line-height: 1.18; font-weight: 800; letter-spacing: -0.02em; }
   backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
 }
 .floating__top:hover { background: rgba(13, 33, 55, 0.95); }
+.floating__toggle {
+  display: none; width: 52px; height: 52px; border-radius: 50%; border: none; padding: 0;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  place-items: center; box-shadow: 0 10px 24px rgba(255, 122, 26, 0.4); cursor: pointer;
+}
 
 /* --------------------------------- Reveal ----------------------------------- */
 .reveal { opacity: 0; transform: translateY(26px); transition: opacity 0.6s ease, transform 0.6s ease; }
@@ -478,6 +484,11 @@ h1, h2, h3, h4 { line-height: 1.18; font-weight: 800; letter-spacing: -0.02em; }
   .btn--lg { padding: 10px 14px; font-size: 13.5px; }
 }
 @media (max-width: 620px) {
+  /* на телефоні — одна кнопка, решта розкриваються */
+  .floating__toggle { display: grid; }
+  .floating a, .floating button:not(.floating__toggle) { display: none; }
+  .floating--open a, .floating--open button:not(.floating__toggle) { display: grid; }
+  .floating a, .floating button:not(.floating__toggle) { animation: fabIn 0.18s ease; }
   .form-grid, .stats, .hero__points { grid-template-columns: 1fr; }
   .btn { padding: 10px 15px; font-size: 13.5px; }
   .btn--lg { padding: 11px 16px; font-size: 14px; }
@@ -496,6 +507,6 @@ h1, h2, h3, h4 { line-height: 1.18; font-weight: 800; letter-spacing: -0.02em; }
   .modal__body { padding: 18px; }
   .section-title { font-size: 25px; }
   .floating { right: 12px; bottom: 12px; }
-  .floating a, .floating button { width: 44px; height: 44px; }
+  .floating a, .floating button:not(.floating__toggle) { width: 44px; height: 44px; }
   .floating { gap: 8px; }
 }

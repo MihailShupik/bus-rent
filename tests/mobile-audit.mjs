@@ -61,6 +61,20 @@ for (const w of [430, 390, 360, 320]) {
   add(w, "сетки в одну колонку", r.busCols === 1 && r.svcCols === 1 && r.advCols === 1 && r.formCols === 1,
       `buses=${r.busCols} svc=${r.svcCols} adv=${r.advCols} steps=${r.stepCols} stats=${r.statCols} form=${r.formCols}`);
 
+  // плавающие кнопки: на телефоне одна сворачиваемая, чтобы не перекрывать контент
+  if (w === 390) {
+    const collapsed = await p.evaluate(() => [...document.querySelectorAll(".floating a, .floating button")].filter((e) => e.offsetParent !== null).length);
+    add(w, "плавающие кнопки свёрнуты в одну", collapsed === 1, `видимых: ${collapsed}`);
+    await p.locator(".floating__toggle").click();
+    await p.waitForTimeout(450);
+    const expanded = await p.evaluate(() => [...document.querySelectorAll(".floating a, .floating button")].filter((e) => e.offsetParent !== null).length);
+    add(w, "по нажатию раскрываются все", expanded >= 5, `видимых: ${expanded}`);
+    await p.locator(".floating__toggle").click();
+    await p.waitForTimeout(350);
+    const back = await p.evaluate(() => [...document.querySelectorAll(".floating a, .floating button")].filter((e) => e.offsetParent !== null).length);
+    add(w, "повторное нажатие сворачивает", back === 1, `видимых: ${back}`);
+  }
+
   // галерея
   await p.locator(".bus-card__media").first().click();
   await p.waitForTimeout(700);

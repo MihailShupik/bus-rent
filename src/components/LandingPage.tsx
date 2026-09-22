@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   Icon, IconArrowRight, IconBus, IconCheck, IconClose, IconMail, IconMapPin,
-  IconMenu, IconPhone, IconSeat, IconSend, IconStar, IconSteering, IconTelegram, IconViber, IconWhatsApp,
+  IconChat, IconMenu, IconPhone, IconSeat, IconSend, IconStar, IconSteering, IconTelegram, IconViber, IconWhatsApp,
 } from "@/components/icons";
 import { companyName as fbCompany, contacts as fbContacts, navItems } from "@/config/site";
 import type { SiteData } from "@/lib/content";
@@ -35,6 +35,7 @@ export default function LandingPage({ initialData }: Props) {
   const [galleryBus, setGalleryBus] = useState<any | null>(null);
   const [activePhoto, setActivePhoto] = useState(0);
   const [toast] = useState("");
+  const [fabOpen, setFabOpen] = useState(false);
 
   const [form, setForm] = useState({ name: "", phone: "", email: "", bus: "", route: "", passengers: "", message: "" });
   const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
@@ -671,13 +672,22 @@ TELEGRAM_BOT_TOKEN=<токен від @BotFather>`}
       </footer>
 
       {/* ----------------------------- Floating buttons ---------------------- */}
-      <div className="floating">
-        <a className="floating__wa" href={links.whatsapp} target="_blank" rel="noreferrer" aria-label="WhatsApp" onClick={() => track("click_whatsapp")}><IconWhatsApp size={24} color="#fff" /></a>
-        <a className="floating__viber" href={links.viber} target="_blank" rel="noreferrer" aria-label="Viber" onClick={() => track("click_viber")}><IconViber size={24} color="#fff" /></a>
-        {links.telegram && <a className="floating__tg" href={links.telegram} target="_blank" rel="noreferrer" aria-label="Telegram" onClick={() => track("click_telegram")}><IconTelegram size={24} color="#fff" /></a>}
-        <a className="floating__call" href={links.phone} aria-label="Подзвонити" onClick={() => track("click_phone")}><IconPhone size={22} color="#fff" /></a>
-        <button className="floating__top" aria-label="Догори" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} style={{ border: "none" }}>
+      <div className={`floating ${fabOpen ? "floating--open" : ""}`}>
+        <a className="floating__wa" href={links.whatsapp} target="_blank" rel="noreferrer" aria-label="WhatsApp" onClick={() => { setFabOpen(false); track("click_whatsapp"); }}><IconWhatsApp size={24} color="#fff" /></a>
+        <a className="floating__viber" href={links.viber} target="_blank" rel="noreferrer" aria-label="Viber" onClick={() => { setFabOpen(false); track("click_viber"); }}><IconViber size={24} color="#fff" /></a>
+        {links.telegram && <a className="floating__tg" href={links.telegram} target="_blank" rel="noreferrer" aria-label="Telegram" onClick={() => { setFabOpen(false); track("click_telegram"); }}><IconTelegram size={24} color="#fff" /></a>}
+        <a className="floating__call" href={links.phone} aria-label="Подзвонити" onClick={() => { setFabOpen(false); track("click_phone"); }}><IconPhone size={22} color="#fff" /></a>
+        <button className="floating__top" aria-label="Догори" onClick={() => { window.scrollTo({ top: 0, behavior: "smooth" }); setFabOpen(false); }}>
           <span style={{ color: "#fff", display: "grid", placeItems: "center" }}><Icon name="arrow" size={22} /></span>
+        </button>
+        {/* На телефонах усі кнопки згорнуті в одну, щоб не перекривати форму та контент */}
+        <button
+          className="floating__toggle"
+          aria-label={fabOpen ? "Закрити швидкий зв'язок" : "Швидкий зв'язок"}
+          aria-expanded={fabOpen}
+          onClick={() => setFabOpen((o) => !o)}
+        >
+          {fabOpen ? <IconClose size={22} color="#fff" /> : <IconChat size={22} color="#fff" />}
         </button>
       </div>
 
