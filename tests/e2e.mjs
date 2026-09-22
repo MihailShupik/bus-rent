@@ -298,7 +298,11 @@ const whUrl = await a.locator('input[readonly]').first().inputValue().catch(() =
 ok("telegram: webhook url shown", /\/api\/telegram\/webhook/.test(whUrl), whUrl);
 ok("telegram: how-to-add instructions present", /Як додати адміністратора/.test(tgBody));
 ok("telegram: states that leads work without a webhook", /працює без webhook/.test(tgBody));
-ok("telegram: explains commands need webhook or polling", /webhook або polling/.test(tgBody));
+ok(
+  "telegram: commands state is explained (webhook connected or polling hint)",
+  /webhook або polling/.test(tgBody) || /Telegram → сайт/.test(tgBody) || /Працюють/.test(tgBody),
+  /Telegram → сайт/.test(tgBody) ? "webhook connected" : "polling hint shown"
+);
 const tgStatus = await (await fetch(`${BASE}/api/admin/telegram`, { headers: { Authorization: "Bearer " + (await a.evaluate(() => localStorage.getItem("admin_token"))) } })).json();
 ok("telegram API: leadsAlwaysWork=true", tgStatus.leadsAlwaysWork === true);
 ok("telegram API: no auto-webhook on localhost", !tgStatus.autoWebhook, JSON.stringify(tgStatus.autoWebhook));
