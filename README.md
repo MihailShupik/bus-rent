@@ -117,13 +117,32 @@ npm run build && npm start
 
 ---
 
-## 5. Деплой на Vercel (безкоштовно)
+## 5. Публікація на GitHub і деплой на Vercel (безкоштовно)
 
-1. Завантажте код у Git-репозиторій (GitHub/GitLab).
-2. [vercel.com](https://vercel.com) → **Add New → Project** → імпортуйте репозиторій.
-3. **Environment Variables**: `DATABASE_URL`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `JWT_SECRET`
-   (за потреби Telegram-змінні).
-4. **Deploy**. Перший відкритий запит сам створить таблиці й наповнить базу.
+### Крок 1 — створити токен GitHub
+GitHub **не приймає пароль** для API/git (це обмеження самого GitHub), тому потрібен токен:
+`github.com` → **Settings → Developer settings → Personal access tokens → Tokens (classic)**
+→ **Generate new token (classic)** → поставте галочку **`repo`** → **Generate** → скопіюйте `ghp_…`.
+
+### Крок 2 — залити проєкт однією командою
+```bash
+GITHUB_TOKEN=ghp_ваш_токен ./scripts/push-to-github.sh bus-rent
+```
+Скрипт сам створить репозиторій на вашому акаунті та завантажить туди `main`.
+(Токен використовується лише на час `push` і не зберігається в `.git/config`.)
+
+Результат: `https://github.com/<ваш-логін>/bus-rent`.
+
+### Крок 3 — імпорт у Vercel
+1. [vercel.com](https://vercel.com) → увійдіть через GitHub → **Add New → Project**.
+2. **Import Git Repository** → виберіть `bus-rent` → **Import**.
+3. **Environment Variables** додайте:
+   `DATABASE_URL` (з Neon), `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `JWT_SECRET`
+   (за потреби — `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID`).
+4. **Deploy**. Після деплою перший запит сам створить таблиці й наповнить базу.
+
+> **Важливо:** спочатку створіть базу на [neon.tech](https://neon.tech) (розділ 3) —
+> `DATABASE_URL` потрібен ще до першого деплою.
 
 ---
 
