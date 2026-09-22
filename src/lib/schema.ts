@@ -113,6 +113,17 @@ export async function ensureSchema() {
     created_at TIMESTAMPTZ DEFAULT NOW()
   )`);
 
+  /* --------------------- Telegram bot administrators --------------------- */
+  await sql(`CREATE TABLE IF NOT EXISTS telegram_admins (
+    id SERIAL PRIMARY KEY,
+    name TEXT NOT NULL DEFAULT '',
+    telegram_id TEXT UNIQUE NOT NULL,
+    role TEXT DEFAULT 'адміністратор',
+    active BOOLEAN DEFAULT true,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+  )`);
+
   /* ------------------ Universal content engine ------------------ */
   await sql(`CREATE TABLE IF NOT EXISTS content_types (
     id SERIAL PRIMARY KEY,

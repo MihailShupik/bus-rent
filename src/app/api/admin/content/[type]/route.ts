@@ -51,7 +51,23 @@ const SCHEMAS: Record<string, TableSchema> = {
     order: "sort_order ASC, id ASC",
     fields: { type_slug: "text", data: "json", sort_order: "int", active: "bool" },
   },
+  "telegram-admins": {
+    table: "telegram_admins",
+    order: "id ASC",
+    fields: { name: "text", telegram_id: "text", role: "text", active: "bool" },
+  },
 };
+
+/** Перетворює технічні помилки Postgres у зрозумілі повідомлення. */
+function friendlyDbError(e: any): string {
+  const msg = String(e?.message || "");
+  if (e?.code === "23505" || msg.includes("duplicate key")) {
+    return "Такий запис уже існує — значення унікального поля вже зайняте (напр. Telegram ID або slug).";
+  }
+  if (e?.code === "23502") return "Не заповнено обов'язкове поле.";
+  if (msg.includes("invalid input syntax for type integer")) return "Очікується число.";
+  return msg || "Невідома помилка";
+}
 
 function coerce(type: FieldType, value: any, nullable = false) {
   if (value === undefined) return undefined;
@@ -162,7 +178,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ typ
     );
     return NextResponse.json({ success: true, id: r[0]?.id });
   } catch (e: any) {
-    return NextResponse.json({ error: e.message }, { status: 500 });
+    return NextResponse.json({ error: friendlyDbError(e) }, { status: 500 });
   }
 }
 
@@ -202,7 +218,7 @@ export async function PUT(request: Request, { params }: { params: Promise<{ type
     await sql(`UPDATE ${schema.table} SET ${sets.join(", ")} WHERE id = $${i}`, values);
     return NextResponse.json({ success: true });
   } catch (e: any) {
-    return NextResponse.json({ error: e.message }, { status: 500 });
+    return NextResponse.json({ error: friendlyDbError(e) }, { status: 500 });
   }
 }
 

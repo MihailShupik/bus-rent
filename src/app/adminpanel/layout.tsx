@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import "./admin.css";
 import {
-  Icon, IconBus, IconGrid, IconInbox, IconLayers, IconLogout, IconMenu, IconSettings, IconStar,
+  Icon, IconBus, IconGrid, IconInbox, IconLayers, IconLogout, IconMenu, IconSend, IconSettings, IconStar,
   IconTrend, IconUsers,
 } from "@/components/icons";
 import { ToastProvider } from "@/components/admin/ui";
@@ -13,10 +13,12 @@ const NAV = [
   { group: "Огляд" },
   { href: "/adminpanel/dashboard", label: "Дашборд", icon: "grid" },
   { href: "/adminpanel/applications", label: "Заявки", icon: "inbox" },
-  { group: "Каталог" },
+  { group: "Контент" },
   { href: "/adminpanel/buses", label: "Автобуси", icon: "bus" },
   { href: "/adminpanel/services", label: "Послуги", icon: "layers" },
-  { group: "Контент" },
+  { group: "Комунікації" },
+  { href: "/adminpanel/telegram", label: "Telegram-бот", icon: "send" },
+  { group: "Контент+" },
   { href: "/adminpanel/advantages", label: "Переваги", icon: "star" },
   { href: "/adminpanel/steps", label: "Кроки замовлення", icon: "trend" },
   { href: "/adminpanel/builder", label: "Конструктор блоків", icon: "layers" },
@@ -26,7 +28,7 @@ const NAV = [
 
 const ICONS: Record<string, (p: any) => React.ReactElement> = {
   grid: IconGrid, inbox: IconInbox, bus: IconBus, layers: IconLayers, star: IconStar,
-  trend: IconTrend, settings: IconSettings, users: IconUsers,
+  trend: IconTrend, settings: IconSettings, users: IconUsers, send: IconSend,
 };
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {

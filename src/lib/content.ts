@@ -1,6 +1,6 @@
 import sql from "./db";
 import { ensureSchema } from "./schema";
-import { defaultAdvantages, defaultBuses, defaultContentItems, defaultContentTypes, defaultServices, defaultSettings, defaultSteps } from "./seed-data";
+import { defaultAdvantages, defaultBuses, defaultContentItems, defaultContentTypes, defaultServices, defaultSettings, defaultSteps, defaultTelegramAdmins } from "./seed-data";
 
 export type SiteData = {
   settings: Record<string, string>;
@@ -12,7 +12,21 @@ export type SiteData = {
   contentItems: any[];
 };
 
+/** Ідемпотентно додає адміністраторів Telegram-бота (працює і на наявних базах). */
+export async function ensureTelegramAdmins() {
+  for (const a of defaultTelegramAdmins) {
+    await sql(
+      `INSERT INTO telegram_admins (name, telegram_id, role, active) VALUES ($1,$2,$3,true)
+       ON CONFLICT (telegram_id) DO NOTHING`,
+      [a.name, a.telegram_id, a.role]
+    );
+  }
+}
+
 export async function seedDatabase(force = false) {
+  // Always idempotent, even for databases that already have content.
+  await ensureTelegramAdmins();
+
   const existing = await sql(`SELECT COUNT(*)::int AS c FROM buses`);
   const settingsCount = await sql(`SELECT COUNT(*)::int AS c FROM site_settings`);
   if (!force && existing[0]?.c > 0 && settingsCount[0]?.c > 0) {
@@ -76,6 +90,10 @@ export async function seedDatabase(force = false) {
       ]);
     }
   }
+
+  // Telegram bot administrators (receive site leads)
+  await ensureTelegramAdmins();
+
   return { skipped: false };
 }
 

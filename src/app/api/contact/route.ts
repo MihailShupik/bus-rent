@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import sql from "@/lib/db";
 import { ensureSchema } from "@/lib/schema";
+import { formatLead, notifyAdmins } from "@/lib/telegram";
 
 export const dynamic = "force-dynamic";
 
@@ -60,6 +61,13 @@ export async function POST(request: Request) {
       } catch (tgError) {
         console.error("Telegram error:", tgError);
       }
+    }
+
+    // Notify every registered bot administrator (site_settings token or env).
+    try {
+      await notifyAdmins(formatLead({ name, phone, email, bus, route, passengers, message }));
+    } catch (tgError) {
+      console.error("Telegram admins notify error:", tgError);
     }
 
     return NextResponse.json({ success: true });

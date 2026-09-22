@@ -220,6 +220,12 @@ export const defaultSteps = [
   { title: "Здійсніть поїздку", icon: "bus", description: "Водій подає транспорт у домовлене місце та час." },
 ];
 
+/** Адміністратори Telegram-бота (отримують заявки з сайту). */
+export const defaultTelegramAdmins = [
+  { name: "Ігор", telegram_id: "899837838", role: "адміністратор" },
+  { name: "Дмитро", telegram_id: "1024336279", role: "адміністратор" },
+];
+
 /** Приклад блоку, створеного універсальним конструктором. */
 export const defaultContentTypes = [
   {
