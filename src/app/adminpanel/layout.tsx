@@ -23,6 +23,7 @@ const NAV = [
   { href: "/adminpanel/steps", label: "Кроки замовлення", icon: "trend" },
   { href: "/adminpanel/builder", label: "Конструктор блоків", icon: "layers" },
   { group: "Система" },
+  { href: "/adminpanel/system", label: "Стан системи", icon: "trend" },
   { href: "/adminpanel/settings", label: "Налаштування", icon: "settings" },
 ];
 

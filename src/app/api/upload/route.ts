@@ -1,14 +1,20 @@
 import { NextResponse } from "next/server";
 import sql from "@/lib/db";
-import { ensureSchema } from "@/lib/schema";
+import { ensureInitialized } from "@/lib/content";
+import { requireAuth } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
 const MAX_SIZE = 12 * 1024 * 1024; // 12MB
-const ALLOWED = ["image/jpeg", "image/png", "image/webp", "image/gif", "image/avif"];
+const ALLOWED = ["image/jpeg", "image/png", "image/webp", "image/gif", "image/avif", "image/svg+xml"];
 
 export async function POST(request: Request) {
   try {
+    // Only signed-in administrators may upload files.
+    if (!requireAuth(request)) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const formData = await request.formData();
     const file = formData.get("file") as File | null;
     if (!file) return NextResponse.json({ error: "Файл не знайдено" }, { status: 400 });
@@ -18,13 +24,13 @@ export async function POST(request: Request) {
     }
     const mime = file.type || "image/jpeg";
     if (!ALLOWED.includes(mime)) {
-      return NextResponse.json({ error: "Дозволені лише зображення (jpg, png, webp, gif, avif)." }, { status: 415 });
+      return NextResponse.json({ error: "Дозволені лише зображення (jpg, png, webp, gif, avif, svg)." }, { status: 415 });
     }
 
     const bytes = await file.arrayBuffer();
     const base64 = Buffer.from(bytes).toString("base64");
 
-    await ensureSchema();
+    await ensureInitialized();
     const rows = await sql(
       `INSERT INTO media (filename, mime, size, data) VALUES ($1,$2,$3,$4) RETURNING id`,
       [file.name || "photo.jpg", mime, file.size, base64]

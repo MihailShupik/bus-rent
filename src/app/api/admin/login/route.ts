@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { generateToken, verifyLogin } from "@/lib/auth";
-import { ensureSchema } from "@/lib/schema";
+import { ensureInitialized } from "@/lib/content";
 
 export const dynamic = "force-dynamic";
 
@@ -10,7 +10,7 @@ export async function POST(request: Request) {
     if (!email || !password) {
       return NextResponse.json({ error: "Email та пароль обов'язкові" }, { status: 400 });
     }
-    await ensureSchema();
+    await ensureInitialized();
     const cleanEmail = String(email).trim().toLowerCase();
     const valid = await verifyLogin(cleanEmail, password);
     if (!valid) return NextResponse.json({ error: "Невірний email або пароль" }, { status: 401 });

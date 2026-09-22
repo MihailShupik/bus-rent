@@ -72,7 +72,6 @@ async function main() {
   console.log(`Polling Telegram-бота через ${SITE_URL} ...`);
   await login();
   console.log("Підключено. Натисніть Ctrl+C, щоб зупинити.\n");
-  // eslint-disable-next-line no-constant-condition
   while (true) {
     try {
       await pollOnce();

@@ -23,22 +23,39 @@ export async function ensureTelegramAdmins() {
   }
 }
 
+/**
+ * Ensures every settings key exists. Missing keys are added with their default
+ * value; existing keys are left untouched so the client's edits are never
+ * overwritten. With `force` the default values are written over the current ones.
+ *
+ * Runs on every bootstrap, including databases that already have content — this
+ * is how newly added admin fields reach an existing installation.
+ */
+export async function ensureSettingsKeys(force = false) {
+  for (const [key, value] of Object.entries(defaultSettings)) {
+    if (force) {
+      await sql(
+        `INSERT INTO site_settings (key, value) VALUES ($1,$2)
+         ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value, updated_at = NOW()`,
+        [key, value]
+      );
+    } else {
+      await sql(
+        `INSERT INTO site_settings (key, value) VALUES ($1,$2) ON CONFLICT (key) DO NOTHING`,
+        [key, value]
+      );
+    }
+  }
+}
+
 export async function seedDatabase(force = false) {
   // Always idempotent, even for databases that already have content.
   await ensureTelegramAdmins();
+  await ensureSettingsKeys(force);
 
   const existing = await sql(`SELECT COUNT(*)::int AS c FROM buses`);
-  const settingsCount = await sql(`SELECT COUNT(*)::int AS c FROM site_settings`);
-  if (!force && existing[0]?.c > 0 && settingsCount[0]?.c > 0) {
+  if (!force && existing[0]?.c > 0) {
     return { skipped: true };
-  }
-
-  for (const [key, value] of Object.entries(defaultSettings)) {
-    await sql(
-      `INSERT INTO site_settings (key, value) VALUES ($1,$2)
-       ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value, updated_at = NOW()`,
-      [key, value]
-    );
   }
 
   for (const [i, b] of defaultBuses.entries()) {
@@ -97,23 +114,97 @@ export async function seedDatabase(force = false) {
   return { skipped: false };
 }
 
+/**
+ * Runs the schema/seed bootstrap exactly once per server process.
+ *
+ * Previously every request executed ~25 sequential DDL/seed statements, which
+ * made a remote database (Neon) take seconds under parallel load. Now the work
+ * happens once and every later request reuses the resolved promise.
+ */
+// State lives on globalThis: in Next.js every route handler and page bundle has
+// its own module instances, so a module-level variable would be duplicated
+// (the bootstrap would run once per bundle instead of once per process).
+const g = globalThis as unknown as {
+  __busrentInit?: Promise<void>;
+  __busrentMeta?: { at: number; data: Record<string, string> };
+};
+
+export function ensureInitialized(): Promise<void> {
+  if (!g.__busrentInit) {
+    g.__busrentInit = (async () => {
+      await ensureSchema();
+      await seedDatabase();
+    })().catch((e) => {
+      // Allow a retry on the next request if the database was temporarily down.
+      g.__busrentInit = undefined;
+      throw e;
+    });
+  }
+  return g.__busrentInit;
+}
 export async function getSiteData(includeInactive = false): Promise<SiteData> {
-  await ensureSchema();
-  await seedDatabase();
+  await ensureInitialized();
 
-  const active = includeInactive ? "" : "WHERE active = true";
-  const [settings, buses, services, advantages, steps, contentTypes, contentItems] = await Promise.all([
-    sql(`SELECT key, value FROM site_settings`),
-    sql(`SELECT * FROM buses ${active} ORDER BY sort_order ASC, id ASC`),
-    sql(`SELECT * FROM services ${active} ORDER BY sort_order ASC, id ASC`),
-    sql(`SELECT * FROM advantages ${active} ORDER BY sort_order ASC, id ASC`),
-    sql(`SELECT * FROM steps ${active} ORDER BY sort_order ASC, id ASC`),
-    sql(`SELECT * FROM content_types ${active} ORDER BY sort_order ASC, id ASC`),
-    sql(`SELECT * FROM content_items ${active} ORDER BY sort_order ASC, id ASC`),
-  ]);
+  // One round trip instead of seven: the database aggregates every collection
+  // into JSON. Matters a lot when the database is remote (Neon/Supabase).
+  const filter = includeInactive ? "" : " WHERE active = true";
+  const rows = await sql(`
+    SELECT
+      (SELECT COALESCE(json_object_agg(key, value), '{}'::json) FROM site_settings) AS settings,
+      (SELECT COALESCE(json_agg(b ORDER BY b.sort_order, b.id), '[]'::json) FROM buses b${filter}) AS buses,
+      (SELECT COALESCE(json_agg(s ORDER BY s.sort_order, s.id), '[]'::json) FROM services s${filter}) AS services,
+      (SELECT COALESCE(json_agg(a ORDER BY a.sort_order, a.id), '[]'::json) FROM advantages a${filter}) AS advantages,
+      (SELECT COALESCE(json_agg(st ORDER BY st.sort_order, st.id), '[]'::json) FROM steps st${filter}) AS steps,
+      (SELECT COALESCE(json_agg(ct ORDER BY ct.sort_order, ct.id), '[]'::json) FROM content_types ct${filter}) AS "contentTypes",
+      (SELECT COALESCE(json_agg(ci ORDER BY ci.sort_order, ci.id), '[]'::json) FROM content_items ci${filter}) AS "contentItems"
+  `);
 
-  const settingsMap: Record<string, string> = {};
-  (settings as any[]).forEach((s) => (settingsMap[s.key] = s.value));
+  const r: any = rows[0] || {};
+  return {
+    settings: r.settings || {},
+    buses: r.buses || [],
+    services: r.services || [],
+    advantages: r.advantages || [],
+    steps: r.steps || [],
+    contentTypes: r.contentTypes || [],
+    contentItems: r.contentItems || [],
+  };
+}
 
-  return { settings: settingsMap, buses, services, advantages, steps, contentTypes, contentItems };
+/**
+ * Lightweight, cached lookup for <head> metadata (SEO title/description, logo).
+ * Kept separate from getSiteData so static pages do not run schema/seed work.
+ */
+/** Скидає кеш метаданих (викликається після збереження налаштувань). */
+export function invalidateSiteMeta() {
+  g.__busrentMeta = undefined;
+}
+
+export async function getSiteMeta(ttlMs = 30_000): Promise<Record<string, string>> {
+  const cached = g.__busrentMeta;
+  if (cached && Date.now() - cached.at < ttlMs) return cached.data;
+
+  const query = () =>
+    sql(
+      `SELECT key, value FROM site_settings
+       WHERE key IN ('seo_title','seo_description','company_name','logo_image','hero_image')`
+    );
+
+  let rows: any[] = [];
+  try {
+    rows = await query();
+  } catch {
+    // Fresh database: create the schema once, then retry.
+    try {
+      await ensureSchema();
+      rows = await query();
+    } catch {
+      return {};
+    }
+  }
+
+  const map: Record<string, string> = {};
+  rows.forEach((r: any) => (map[r.key] = r.value));
+  g.__busrentMeta = { at: Date.now(), data: map };
+  return map;
 }

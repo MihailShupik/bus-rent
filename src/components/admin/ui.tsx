@@ -158,14 +158,8 @@ export function IconPicker({ value, onChange, label = "Іконка" }: { value:
 }
 
 export async function uploadFile(file: File): Promise<string> {
-  const { compressImage } = await import("@/lib/upload");
-  const compressed = await compressImage(file);
-  const fd = new FormData();
-  fd.append("file", compressed);
-  const res = await fetch("/api/upload", { method: "POST", body: fd });
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.error || "Помилка завантаження");
-  return data.url as string;
+  const { uploadPhoto } = await import("@/lib/upload");
+  return uploadPhoto(file);
 }
 
 export function ImageField({ label, value, onChange }: { label: string; value: string; onChange: (v: string) => void }) {

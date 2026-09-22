@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import sql from "@/lib/db";
-import { ensureSchema } from "@/lib/schema";
+import { ensureInitialized } from "@/lib/content";
 import { formatLead, notifyAdmins } from "@/lib/telegram";
 
 export const dynamic = "force-dynamic";
@@ -26,7 +26,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Невірний формат телефону. Використовуйте лише цифри та символи + ( ) -" }, { status: 400 });
     }
 
-    await ensureSchema();
+    await ensureInitialized();
 
     try {
       await sql(

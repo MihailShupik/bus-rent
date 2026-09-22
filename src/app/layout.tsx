@@ -1,20 +1,39 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { getSiteMeta } from "@/lib/content";
 
-export const metadata: Metadata = {
-  title: "BusRent | Оренда автобусів і мікроавтобусів з водієм",
-  description:
-    "Пасажирські перевезення, оренда автобусів і мікроавтобусів, трансфери, міжміські та корпоративні перевезення. Подача за адресою, досвідчені водії, працюємо 24/7.",
-  keywords: ["оренда автобуса", "оренда мікроавтобуса", "пасажирські перевезення", "трансфер", "автобус з водієм"],
-  icons: { icon: "/favicon.svg", shortcut: "/favicon.svg", apple: "/favicon.svg" },
-  openGraph: {
-    title: "BusRent | Оренда автобусів і мікроавтобусів з водієм",
-    description: "Комфортабельні автобуси та мікроавтобуси для міста, міжміських рейсів, трансферів і заходів.",
-    type: "website",
-    locale: "uk_UA",
-  },
-  robots: { index: true, follow: true },
-};
+const FALLBACK_TITLE = "BusRent | Оренда автобусів і мікроавтобусів з водієм";
+const FALLBACK_DESCRIPTION =
+  "Пасажирські перевезення, оренда автобусів і мікроавтобусів, трансфери, міжміські та корпоративні перевезення. Подача за адресою, досвідчені водії, працюємо 24/7.";
+
+/** SEO-поля та логотип редагуються в адмінці: Налаштування → SEO / Загальне. */
+export async function generateMetadata(): Promise<Metadata> {
+  let meta: Record<string, string> = {};
+  try {
+    meta = await getSiteMeta();
+  } catch {
+    meta = {};
+  }
+
+  const title = meta.seo_title || FALLBACK_TITLE;
+  const description = meta.seo_description || FALLBACK_DESCRIPTION;
+  const icon = meta.logo_image || "/favicon.svg";
+
+  return {
+    title,
+    description,
+    keywords: ["оренда автобуса", "оренда мікроавтобуса", "пасажирські перевезення", "трансфер", "автобус з водієм"],
+    icons: { icon, shortcut: icon, apple: icon },
+    openGraph: {
+      title,
+      description,
+      type: "website",
+      locale: "uk_UA",
+      images: meta.hero_image ? [{ url: meta.hero_image }] : undefined,
+    },
+    robots: { index: true, follow: true },
+  };
+}
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (

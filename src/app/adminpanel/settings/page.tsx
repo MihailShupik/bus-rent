@@ -11,6 +11,7 @@ const GROUPS: { title: string; defs: Def[] }[] = [
     defs: [
       { key: "company_name", label: "Назва компанії" },
       { key: "header_subtitle", label: "Підзаголовок у шапці" },
+      { key: "logo_image", label: "Логотип компанії", type: "image", hint: "PNG/SVG на прозорому фоні. Якщо порожньо — використовується стандартна іконка" },
       { key: "working_hours", label: "Графік роботи" },
       { key: "area", label: "Регіон роботи" },
     ],

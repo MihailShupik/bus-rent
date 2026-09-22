@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import sql from "@/lib/db";
 import { requireAuth } from "@/lib/auth";
-import { ensureSchema } from "@/lib/schema";
+import { invalidateSiteMeta } from "@/lib/content";
+import { ensureInitialized } from "@/lib/content";
 
 export const dynamic = "force-dynamic";
 
@@ -102,7 +103,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ type
   const { type } = await params;
 
   try {
-    await ensureSchema();
+    await ensureInitialized();
 
     if (type === "settings") {
       const rows = await sql(`SELECT key, value FROM site_settings ORDER BY key ASC`);
@@ -131,7 +132,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ typ
   const { type } = await params;
 
   try {
-    await ensureSchema();
+    await ensureInitialized();
     const body = await request.json();
 
     if (type === "settings") {
@@ -144,6 +145,8 @@ export async function POST(request: Request, { params }: { params: Promise<{ typ
           [String(entry.key), String(entry.value ?? "")]
         );
       }
+      // SEO-поля та логотип мають застосуватись одразу, без очікування кешу.
+      invalidateSiteMeta();
       return NextResponse.json({ success: true });
     }
 
@@ -187,7 +190,7 @@ export async function PUT(request: Request, { params }: { params: Promise<{ type
   const { type } = await params;
 
   try {
-    await ensureSchema();
+    await ensureInitialized();
     const body = await request.json();
     const { id, ...data } = body;
     if (!id) return NextResponse.json({ error: "ID обов'язковий" }, { status: 400 });
@@ -230,7 +233,7 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ t
   if (!id) return NextResponse.json({ error: "ID обов'язковий" }, { status: 400 });
 
   try {
-    await ensureSchema();
+    await ensureInitialized();
     if (type === "applications") {
       await sql(`DELETE FROM applications WHERE id = $1`, [parseInt(id, 10)]);
       return NextResponse.json({ success: true });

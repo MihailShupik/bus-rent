@@ -15,6 +15,18 @@ const emptyData: SiteData = { settings: {}, buses: [], services: [], advantages:
 
 const KNOWN_TYPES = ["advantages", "steps"];
 
+/** Логотип компанії: завантажений з адмінки або стандартна SVG-іконка. */
+function BrandMark({ logo, size = 26, badge = false }: { logo?: string; size?: number; badge?: boolean }) {
+  if (logo) {
+    return (
+      <span className="brand__mark brand__mark--logo" style={badge ? { background: "#fff" } : undefined}>
+        <img src={logo} alt="" />
+      </span>
+    );
+  }
+  return <span className="brand__mark" style={badge ? { background: "linear-gradient(135deg,#ff7a1a,#ffa64d)" } : undefined}><IconBus size={size} /></span>;
+}
+
 export default function LandingPage({ initialData }: Props) {
   const [data, setData] = useState<SiteData>(initialData || emptyData);
   const [ready, setReady] = useState(!!initialData);
@@ -61,6 +73,7 @@ export default function LandingPage({ initialData }: Props) {
   }, [ready, data]);
 
   const s = (key: string, fallback: string) => data.settings?.[key] || fallback;
+  const logo = data.settings?.logo_image || "";
 
   const contacts = {
     phoneDisplay: s("phone_display", fbContacts.phoneDisplay),
@@ -192,7 +205,7 @@ export default function LandingPage({ initialData }: Props) {
       <header className="header">
         <div className="container header__row">
           <a className="brand" href="#hero">
-            <span className="brand__mark"><IconBus size={26} /></span>
+            <BrandMark logo={logo} size={26} />
             <span className="brand__text">
               <strong>{s("company_name", fbCompany)}</strong>
               <small>{s("header_subtitle", "Пасажирські перевезення та оренда автобусів")}</small>
@@ -296,7 +309,7 @@ export default function LandingPage({ initialData }: Props) {
             <div className="about-media reveal">
               {data.settings?.about_image && <img src={data.settings.about_image} alt="Автопарк" />}
               <div className="about-badge">
-                <span className="brand__mark" style={{ background: "linear-gradient(135deg,#ff7a1a,#ffa64d)" }}><IconBus size={24} /></span>
+                <BrandMark logo={logo} size={24} badge />
                 <span><strong>{s("about_buses", "40")}+</strong><span>автобусів у власному парку</span></span>
               </div>
             </div>
@@ -579,7 +592,7 @@ export default function LandingPage({ initialData }: Props) {
           <div className="footer__grid">
             <div>
               <a className="brand" href="#hero">
-                <span className="brand__mark"><IconBus size={26} /></span>
+                <BrandMark logo={logo} size={26} />
                 <span className="brand__text">
                   <strong>{s("company_name", fbCompany)}</strong>
                   <small>{s("header_subtitle", "")}</small>

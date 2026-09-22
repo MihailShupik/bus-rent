@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { ensureSchema } from "@/lib/schema";
+import { ensureInitialized } from "@/lib/content";
 import { getWebhookSecret, handleTelegramUpdate } from "@/lib/telegram";
 
 export const dynamic = "force-dynamic";
@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic";
 /** Telegram sends updates here (set via the admin panel → "Підключити webhook"). */
 export async function POST(request: Request) {
   try {
-    await ensureSchema();
+    await ensureInitialized();
 
     // If a secret is configured, Telegram must present it.
     const secret = await getWebhookSecret();

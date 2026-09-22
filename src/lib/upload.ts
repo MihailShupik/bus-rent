@@ -36,7 +36,12 @@ export async function uploadPhoto(file: File, folder = "photos"): Promise<string
   const fd = new FormData();
   fd.append("file", compressed);
   fd.append("folder", folder);
-  const r = await fetch("/api/upload", { method: "POST", body: fd });
+  const token = typeof window !== "undefined" ? localStorage.getItem("admin_token") || "" : "";
+  const r = await fetch("/api/upload", {
+    method: "POST",
+    body: fd,
+    headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+  });
   const d = await r.json();
   if (!r.ok) throw new Error(d.error || "Upload failed");
   return d.url as string;

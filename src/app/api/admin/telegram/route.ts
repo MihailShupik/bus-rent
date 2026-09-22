@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { requireAuth } from "@/lib/auth";
-import { ensureSchema } from "@/lib/schema";
+import { ensureInitialized } from "@/lib/content";
 import {
   deleteWebhook, ensureWebhookSecret, getBotInfo, getWebhookInfo, hasBotToken,
   listBotAdmins, pollUpdates, sendMessage, setWebhook,
@@ -20,7 +20,7 @@ function baseUrl(request: Request): string {
 export async function GET(request: Request) {
   if (!requireAuth(request)) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   try {
-    await ensureSchema();
+    await ensureInitialized();
     const configured = await hasBotToken();
     const [bot, webhook, admins] = await Promise.all([
       configured ? getBotInfo() : { ok: false },
@@ -44,7 +44,7 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   if (!requireAuth(request)) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   try {
-    await ensureSchema();
+    await ensureInitialized();
     const body = await request.json();
     const action = String(body.action || "");
 

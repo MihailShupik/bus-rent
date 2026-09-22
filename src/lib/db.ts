@@ -38,7 +38,7 @@ function getPool(): Pool {
     pool = new Pool({
       connectionString: connStr,
       ssl: /sslmode=require|neon\.tech|supabase/.test(connStr) ? { rejectUnauthorized: false } : false,
-      max: 5,
+      max: 10,
       connectionTimeoutMillis: 15000,
       idleTimeoutMillis: 30000,
     });
