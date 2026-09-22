@@ -89,12 +89,12 @@ await a.waitForURL("**/adminpanel/dashboard", { timeout: 40000 });
 await a.waitForTimeout(1500);
 const burger = await a.locator(".a-burger").isVisible();
 add(390, "админка: есть бургер-меню", burger);
-await a.screenshot({ path: "${SHOTS}/admin-dashboard.png", fullPage: true });
+await a.screenshot({ path: `${SHOTS}/admin-dashboard.png`, fullPage: true });
 if (burger) {
   await a.locator(".a-burger").click(); await a.waitForTimeout(500);
   const drawerOpen = await a.locator(".a-side.open").count() === 1;
   add(390, "админка: меню открывается", drawerOpen);
-  await a.screenshot({ path: "${SHOTS}/admin-menu.png" });
+  await a.screenshot({ path: `${SHOTS}/admin-menu.png` });
   await a.locator(".a-overlay").click({ position: { x: 380, y: 700 } }).catch(() => {});
   await a.waitForTimeout(500);
 }
