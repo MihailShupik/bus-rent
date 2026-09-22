@@ -328,7 +328,7 @@ TELEGRAM_BOT_TOKEN=<токен від @BotFather>`}
 
         {/* ------------------------------- About ------------------------------- */}
         <section className="section" id="about">
-          <div className="container about-grid">
+          <div className={`container about-grid ${data.settings?.about_image ? "" : "about-grid--single"}`}>
             <div className="reveal">
               <span className="eyebrow">{s("about_label", "Про компанію")}</span>
               <h2 className="section-title">{s("about_title", "Наша компанія")}</h2>
@@ -340,13 +340,15 @@ TELEGRAM_BOT_TOKEN=<токен від @BotFather>`}
                 <div className="stat"><strong>{s("about_clients", "1800")}+</strong><span>{s("about_stat_clients", "задоволених клієнтів")}</span></div>
               </div>
             </div>
+            {data.settings?.about_image && (
             <div className="about-media reveal">
-              {data.settings?.about_image && <img src={data.settings.about_image} alt="Автопарк" />}
+              <img src={data.settings.about_image} alt="Автопарк" />
               <div className="about-badge">
-                <BrandMark logo={logo} size={24} badge />
+                <span className="about-badge__mark"><IconBus size={24} /></span>
                 <span><strong>{s("about_buses", "40")}+</strong><span>автобусів у власному парку</span></span>
               </div>
             </div>
+            )}
           </div>
         </section>
 

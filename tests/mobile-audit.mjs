@@ -58,6 +58,31 @@ for (const w of [430, 390, 360, 320]) {
   add(w, "нет горизонтального переполнения", r.scrollW <= r.vw + 1, `scrollW=${r.scrollW} vw=${r.vw}`);
   if (r.bad.length) add(w, "элементы не выходят за экран", false, r.bad.join(", "));
   add(w, "нет слишком маленьких кнопок (<36px)", r.small.length === 0, r.small.join(", "));
+
+  // визуальные дефекты: текст, вылезающий из блока, и элементы шире родителя
+  const visual = await p.evaluate(() => {
+    const textOverflow = [], outOfParent = [];
+    document.querySelectorAll("h1,h2,h3,h4,p,span,strong,small,li,a,button").forEach((el) => {
+      if (!el.offsetParent || el.children.length > 0) return;
+      const cs = getComputedStyle(el);
+      if (cs.overflow === "hidden" || cs.overflowX === "hidden") return;
+      if (el.clientWidth > 0 && el.scrollWidth > el.clientWidth + 2) {
+        textOverflow.push(((el.className || el.tagName) + "").slice(0, 24) + ` (${el.scrollWidth}>${el.clientWidth})`);
+      }
+    });
+    document.querySelectorAll("section, div, article, figure, img").forEach((el) => {
+      const par = el.parentElement;
+      if (!par || !el.offsetParent) return;
+      const a = el.getBoundingClientRect(), c = par.getBoundingClientRect();
+      const pcs = getComputedStyle(par);
+      if (a.width > 0 && a.width > c.width + 2 && pcs.display !== "flex" && pcs.overflow === "visible") {
+        outOfParent.push(((el.className || el.tagName) + "").slice(0, 24) + ` (${Math.round(a.width)}>${Math.round(c.width)})`);
+      }
+    });
+    return { textOverflow: [...new Set(textOverflow)].slice(0, 3), outOfParent: [...new Set(outOfParent)].slice(0, 3) };
+  });
+  add(w, "текст не вылезает за блок", visual.textOverflow.length === 0, visual.textOverflow.join(" | "));
+  add(w, "элементы не шире родителя", visual.outOfParent.length === 0, visual.outOfParent.join(" | "));
   add(w, "сетки в одну колонку", r.busCols === 1 && r.svcCols === 1 && r.advCols === 1 && r.formCols === 1,
       `buses=${r.busCols} svc=${r.svcCols} adv=${r.advCols} steps=${r.stepCols} stats=${r.statCols} form=${r.formCols}`);
 
