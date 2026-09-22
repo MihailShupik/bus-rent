@@ -7,6 +7,8 @@
 Стек: **Next.js 16 + React 19 + TypeScript + PostgreSQL (`pg`)**.
 Уся верстка — власна CSS-система (змінні, адаптивність, glassmorphism у шапці), усі іконки — **SVG** (без емодзі).
 
+> **Репозиторій:** https://github.com/MihailShupik/bus-rent — звідси проєкт імпортується у Vercel.
+
 ---
 
 ## 1. Що є в проєкті
