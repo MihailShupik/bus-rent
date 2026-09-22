@@ -34,6 +34,7 @@ export async function ensureSchema() {
     price TEXT DEFAULT '',
     price_unit TEXT DEFAULT 'година',
     photos TEXT[] DEFAULT '{}',
+    photo_captions TEXT[] DEFAULT '{}',
     main_photo TEXT DEFAULT '',
     sort_order INT DEFAULT 0,
     active BOOLEAN DEFAULT true,
@@ -151,6 +152,7 @@ export async function ensureSchema() {
   // Lightweight migrations for older installs
   await sql(`ALTER TABLE buses ADD COLUMN IF NOT EXISTS rental_terms TEXT DEFAULT ''`).catch(() => {});
   await sql(`ALTER TABLE buses ADD COLUMN IF NOT EXISTS bus_type TEXT DEFAULT ''`).catch(() => {});
+  await sql(`ALTER TABLE buses ADD COLUMN IF NOT EXISTS photo_captions TEXT[] DEFAULT '{}'`).catch(() => {});
   await sql(`ALTER TABLE applications ADD COLUMN IF NOT EXISTS route TEXT DEFAULT ''`).catch(() => {});
   await sql(`ALTER TABLE applications ADD COLUMN IF NOT EXISTS passengers TEXT DEFAULT ''`).catch(() => {});
 

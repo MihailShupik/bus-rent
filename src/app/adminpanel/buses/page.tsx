@@ -3,7 +3,7 @@
 import { ResourceManager, type FieldDef } from "@/components/admin/ui";
 
 const fields: FieldDef[] = [
-  { key: "photos", label: "Фотографії", type: "photos", span: true },
+  { key: "photos", label: "Фотографії", type: "photos", span: true }, 
   { key: "name", label: "Назва", type: "text", placeholder: "Mercedes-Benz Sprinter" },
   { key: "slug", label: "Slug (унікальний)", type: "text", placeholder: "mercedes-sprinter", hint: "Латиниця, без пробілів" },
   { key: "brand", label: "Марка", type: "text", placeholder: "Mercedes-Benz" },
@@ -43,7 +43,7 @@ export default function BusesAdmin() {
       defaults={{
         slug: "", name: "", brand: "", model: "", seats: 0, year: new Date().getFullYear(),
         bus_type: "", description: "", specs: [], rental_terms: "", price: "", price_unit: "година",
-        photos: [], main_photo: "", sort_order: 0, active: true,
+        photos: [], photo_captions: [], main_photo: "", sort_order: 0, active: true,
       }}
     />
   );

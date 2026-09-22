@@ -169,6 +169,7 @@ export default function LandingPage({ initialData }: Props) {
   };
 
   const busPhoto = (b: any) => mainPhotoOf(b);
+  const busCaption = (b: any, i: number) => (Array.isArray(b.photo_captions) ? b.photo_captions[i] || "" : "");
   const busPhotos = (b: any) => photoGallery(b);
   const money = (v: string) => (v || "").toString();
   const priceUnit = (u: string) => normalizePriceUnit(u);
@@ -646,16 +647,20 @@ export default function LandingPage({ initialData }: Props) {
             <button className="modal__close" onClick={() => setGalleryBus(null)} aria-label="Закрити"><IconClose size={22} /></button>
             <div className="gallery__main">
               {busPhotos(galleryBus).length ? (
-                <img src={busPhotos(galleryBus)[activePhoto] || busPhotos(galleryBus)[0]} alt={galleryBus.name} />
+                <img src={busPhotos(galleryBus)[activePhoto] || busPhotos(galleryBus)[0]} alt={busCaption(galleryBus, activePhoto) || galleryBus.name} />
               ) : (
                 <div style={{ display: "grid", placeItems: "center", height: "100%", color: "rgba(255,255,255,0.3)" }}><IconBus size={120} strokeWidth={1} /></div>
               )}
             </div>
+            {busCaption(galleryBus, activePhoto) && (
+              <div className="gallery__caption">{busCaption(galleryBus, activePhoto)}</div>
+            )}
             {busPhotos(galleryBus).length > 1 && (
               <div className="gallery__thumbs">
                 {busPhotos(galleryBus).map((p: string, i: number) => (
-                  <div key={p + i} className={`gallery__thumb ${i === activePhoto ? "gallery__thumb--active" : ""}`} onClick={() => setActivePhoto(i)}>
-                    <img src={p} alt="" />
+                  <div key={p + i} className={`gallery__thumb ${i === activePhoto ? "gallery__thumb--active" : ""}`} onClick={() => setActivePhoto(i)}
+                    title={busCaption(galleryBus, i) || `Фото ${i + 1}`}>
+                    <img src={p} alt={busCaption(galleryBus, i) || ""} />
                   </div>
                 ))}
               </div>

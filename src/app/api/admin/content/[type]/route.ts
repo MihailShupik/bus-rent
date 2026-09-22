@@ -23,7 +23,7 @@ const SCHEMAS: Record<string, TableSchema> = {
     fields: {
       slug: "text", name: "text", brand: "text", model: "text", seats: "int", year: "int",
       bus_type: "text", description: "text", specs: "array", rental_terms: "text",
-      price: "text", price_unit: "text", photos: "array", main_photo: "text",
+      price: "text", price_unit: "text", photos: "array", photo_captions: "array", main_photo: "text",
       sort_order: "int", active: "bool",
     },
   },

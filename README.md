@@ -8,6 +8,7 @@
 Уся верстка — власна CSS-система (змінні, адаптивність, glassmorphism у шапці), усі іконки — **SVG** (без емодзі).
 
 > **Репозиторій:** https://github.com/MihailShupik/bus-rent — звідси проєкт імпортується у Vercel.
+> **Відповідність ТЗ:** [`TZ-COMPLIANCE.md`](TZ-COMPLIANCE.md) — матриця «пункт ТЗ → реалізація → доказ».
 
 ---
 
@@ -203,7 +204,14 @@ GITHUB_TOKEN=ghp_ваш_токен ./scripts/push-to-github.sh bus-rent
 
 Результат: `https://github.com/<ваш-логін>/bus-rent`.
 
-### Крок 3 — імпорт у Vercel
+### Крок 3 (варіант А) — деплой однією командою
+```bash
+VERCEL_TOKEN=ваш_токен ./scripts/deploy-vercel.sh
+```
+Скрипт підключить проєкт, пропише змінні середовища (з `.env.vercel`, `.env.neon` або `.env.local`)
+і зробить production-деплой. Токен: vercel.com/account/tokens.
+
+### Крок 3 (варіант Б) — імпорт через інтерфейс Vercel
 1. [vercel.com](https://vercel.com) → увійдіть через GitHub → **Add New → Project**.
 2. **Import Git Repository** → виберіть `bus-rent` → **Import**.
 3. **Environment Variables** додайте:

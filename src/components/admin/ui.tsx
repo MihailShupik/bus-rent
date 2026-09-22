@@ -187,66 +187,121 @@ export function ImageField({ label, value, onChange }: { label: string; value: s
   );
 }
 
-export function PhotosManager({ photos, mainPhoto, onChange }: {
-  photos: string[]; mainPhoto: string; onChange: (photos: string[], main: string) => void;
+export function PhotosManager({
+  photos, mainPhoto, captions, onChange,
+}: {
+  photos: string[];
+  mainPhoto: string;
+  captions?: string[];
+  onChange: (photos: string[], main: string, captions: string[]) => void;
 }) {
   const [busy, setBusy] = useState(false);
-  const list = Array.isArray(photos) ? photos : [];
+  const urls = Array.isArray(photos) ? photos : [];
+  const caps = Array.isArray(captions) ? captions : [];
+
+  // Працюємо з парами «фото + підпис», щоб підпис завжди рухався разом із фото.
+  const pairs = urls.map((url, i) => ({ url, caption: caps[i] || "" }));
+  const emit = (next: { url: string; caption: string }[], main = mainPhoto) => {
+    const nextUrls = next.map((p) => p.url);
+    const nextMain = nextUrls.includes(main) ? main : nextUrls[0] || "";
+    onChange(nextUrls, nextMain, next.map((p) => p.caption));
+  };
 
   const addFiles = async (files: FileList | null) => {
     if (!files?.length) return;
     setBusy(true);
-    const next = [...list];
+    const next = [...pairs];
     try {
       for (const f of Array.from(files)) {
-        next.push(await uploadFile(f));
+        next.push({ url: await uploadFile(f), caption: "" });
       }
-      onChange(next, mainPhoto || next[0] || "");
+      emit(next, mainPhoto || next[0]?.url || "");
     } catch (e: any) { alert(e.message); }
     setBusy(false);
   };
 
   const move = (i: number, dir: -1 | 1) => {
     const j = i + dir;
-    if (j < 0 || j >= list.length) return;
-    const next = [...list];
+    if (j < 0 || j >= pairs.length) return;
+    const next = [...pairs];
     [next[i], next[j]] = [next[j], next[i]];
-    onChange(next, mainPhoto);
+    emit(next);
   };
 
   const remove = (i: number) => {
-    const removed = list[i];
-    const next = list.filter((_, idx) => idx !== i);
-    onChange(next, mainPhoto === removed ? next[0] || "" : mainPhoto);
+    const removed = pairs[i].url;
+    const next = pairs.filter((_, idx) => idx !== i);
+    emit(next, mainPhoto === removed ? next[0]?.url || "" : mainPhoto);
   };
 
-  const setMain = (url: string) => onChange(list, url);
+  const setCaption = (i: number, value: string) => {
+    const next = pairs.map((p, idx) => (idx === i ? { ...p, caption: value } : p));
+    emit(next);
+  };
+
+  const SUGGESTED = ["Зовні", "Салон", "Місце водія", "Багажне відділення"];
 
   return (
     <div className="a-field">
-      <label>Фотографії ({list.length})</label>
+      <label>Фотографії ({pairs.length})</label>
       <label className="a-drop">
         <IconImage size={22} />
         <div style={{ marginTop: 6 }}>{busy ? "Завантаження..." : "Натисніть, щоб вибрати декілька фото"}</div>
         <input type="file" accept="image/*" multiple hidden onChange={(e) => addFiles(e.target.files)} disabled={busy} />
       </label>
-      {list.length > 0 && (
+
+      {pairs.length > 0 && (
         <div className="a-photos" style={{ marginTop: 12 }}>
-          {list.map((p, i) => (
-            <div key={p + i} className={`a-photo ${mainPhoto === p ? "a-photo--main" : ""}`}>
-              <img src={p} alt="" />
-              {mainPhoto === p && <span className="a-photo__main-tag">Головне</span>}
+          {pairs.map((pair, i) => (
+            <div key={pair.url + i} className={`a-photo ${mainPhoto === pair.url ? "a-photo--main" : ""}`}>
+              <img src={pair.url} alt="" />
+              {mainPhoto === pair.url && <span className="a-photo__main-tag">Головне</span>}
               <div className="a-photo__tools">
-                <button type="button" onClick={() => move(i, -1)} title="Вліво" disabled={i === 0} style={{ opacity: i === 0 ? 0.4 : 1 }}><IconChevronUp size={14} /></button>
-                <button type="button" onClick={() => setMain(p)} title="Зробити головним"><IconCheck size={14} /></button>
-                <button type="button" onClick={() => move(i, 1)} title="Вправо" disabled={i === list.length - 1} style={{ opacity: i === list.length - 1 ? 0.4 : 1 }}><IconChevronDown size={14} /></button>
+                <button type="button" onClick={() => move(i, -1)} title="Раніше" disabled={i === 0} style={{ opacity: i === 0 ? 0.4 : 1 }}><IconChevronUp size={14} /></button>
+                <button type="button" onClick={() => emit(pairs, pair.url)} title="Зробити головним"><IconCheck size={14} /></button>
+                <button type="button" onClick={() => move(i, 1)} title="Пізніше" disabled={i === pairs.length - 1} style={{ opacity: i === pairs.length - 1 ? 0.4 : 1 }}><IconChevronDown size={14} /></button>
                 <button type="button" onClick={() => remove(i)} title="Видалити"><IconTrash size={14} /></button>
               </div>
             </div>
           ))}
         </div>
       )}
-      <small>Перше фото використовується як основне, якщо не обрано інше. Порядок змінюється кнопками.</small>
+
+      {pairs.length > 0 && (
+        <div style={{ marginTop: 10, display: "grid", gap: 6 }}>
+          {pairs.map((pair, i) => (
+            <div className="a-list__row" key={"cap" + pair.url + i}>
+              <span className="a-muted" style={{ width: 26, textAlign: "right" }}>{i + 1}.</span>
+              <input
+                value={pair.caption}
+                onChange={(e) => setCaption(i, e.target.value)}
+                placeholder={SUGGESTED[i] ? `Підпис (напр. «${SUGGESTED[i]}»)` : "Підпис до фото"}
+              />
+            </div>
+          ))}
+          <div className="a-row a-row--wrap" style={{ gap: 6 }}>
+            <span className="a-muted" style={{ fontSize: 12 }}>Підказка:</span>
+            {SUGGESTED.map((label) => (
+              <button
+                type="button"
+                key={label}
+                className="a-btn a-btn--gray a-btn--sm"
+                onClick={() => {
+                  const empty = pairs.findIndex((p) => !p.caption);
+                  if (empty >= 0) setCaption(empty, label);
+                }}
+              >
+                + {label}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <small>
+        Рекомендуємо 5–10 фото на автобус: зовні, салон, місце водія, багажне відділення, додаткові.
+        Перше фото стає головним, якщо не обрано інше. Фото стискаються автоматично.
+      </small>
     </div>
   );
 }
@@ -342,7 +397,7 @@ export function ResourceManager({ type, title, description, addLabel, fields, de
       case "icon": return <IconPicker key={f.key} label={f.label} value={val || "check"} onChange={set} />;
       case "image": return <ImageField key={f.key} label={f.label} value={val} onChange={set} />;
       case "list": return <ListEditor key={f.key} label={f.label} items={val} onChange={set} placeholder={f.placeholder} />;
-      case "photos": return <PhotosManager key={f.key} photos={editing?.photos} mainPhoto={editing?.main_photo} onChange={(photos, main) => setEditing((prev: any) => ({ ...prev, photos, main_photo: main }))} />;
+      case "photos": return <PhotosManager key={f.key} photos={editing?.photos} mainPhoto={editing?.main_photo} captions={editing?.photo_captions} onChange={(photos, main, captions) => setEditing((prev: any) => ({ ...prev, photos, main_photo: main, photo_captions: captions }))} />;
       default: return <TextField key={f.key} label={f.label} value={val} onChange={set} placeholder={f.placeholder} hint={f.hint} />;
     }
   };

@@ -24,6 +24,7 @@ const OUT = process.env.SHOT_DIR || "/tmp/busrent-shots";
 const BASE = process.env.BASE_URL || "http://localhost:3000";
 fs.mkdirSync(OUT, { recursive: true });
 
+
 const errors = [];
 const results = [];
 const ok = (name, cond, extra = "") => {
@@ -121,9 +122,17 @@ await page.screenshot({ path: `${OUT}/02-form-preselected.png` });
 /* -------- gallery modal -------- */
 await page.goto(BASE + "/", { waitUntil: "networkidle" });
 await page.waitForTimeout(400);
+const photosBadge = await page.locator(".bus-card__photos-count").first().innerText().catch(() => "");
 await page.locator(".bus-card__media").first().click();
-await page.waitForTimeout(500);
+await page.waitForTimeout(600);
 ok("gallery modal opens", await page.locator(".modal__panel").count() === 1);
+const thumbs = await page.locator(".gallery__thumb").count();
+ok("gallery: >=5 photos per bus (spec 5-10)", thumbs >= 5, `thumbs=${thumbs} badge="${photosBadge}"`);
+const cap1 = await page.locator(".gallery__caption").first().innerText().catch(() => "");
+await page.locator(".gallery__thumb").nth(2).click();
+await page.waitForTimeout(400);
+const cap2 = await page.locator(".gallery__caption").first().innerText().catch(() => "");
+ok("gallery: photo captions (exterior/interior/driver/luggage)", !!cap1 && !!cap2 && cap1 !== cap2, `"${cap1}" -> "${cap2}"`);
 ok("gallery modal has close button", await page.locator(".modal__close").count() === 1);
 await page.screenshot({ path: `${OUT}/03-bus-modal.png` });
 await page.locator(".modal__close").click();
