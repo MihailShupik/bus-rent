@@ -22,11 +22,28 @@ export async function GET(request: Request) {
   try {
     await ensureInitialized();
     const configured = await hasBotToken();
-    const [bot, webhook, admins] = await Promise.all([
-      configured ? getBotInfo() : { ok: false },
-      configured ? getWebhookInfo() : { ok: false },
+    const [bot, admins] = await Promise.all([
+      configured ? getBotInfo() : Promise.resolve({ ok: false }),
       listBotAdmins(false),
     ]);
+    let webhook = configured ? await getWebhookInfo() : { ok: false };
+
+    const siteUrl = baseUrl(request);
+    const isPublicHttps = /^https:\/\//.test(siteUrl) && !/localhost|127\.0\.0\.1|\.local/.test(siteUrl);
+
+    // Автоматично реєструємо webhook на публічному HTTPS-домені, якщо його ще немає.
+    // Так бот «просто працює» після деплою — без ручних кнопок.
+    // Якщо webhook уже вказано (напр. на інший домен), не чіпаємо.
+    let autoWebhook: any = null;
+    const currentUrl = webhook?.result?.url || "";
+    if (configured && isPublicHttps && !currentUrl) {
+      const secret = await ensureWebhookSecret();
+      const target = `${siteUrl}/api/telegram/webhook`;
+      const res = await setWebhook(target, secret);
+      autoWebhook = { ok: !!res.ok, url: target, error: res.ok ? undefined : res.description };
+      if (res.ok) webhook = await getWebhookInfo();
+    }
+
     const tokenFromEnv = !!process.env.TELEGRAM_BOT_TOKEN;
     return NextResponse.json({
       configured,
@@ -34,7 +51,12 @@ export async function GET(request: Request) {
       bot,
       webhook,
       admins,
-      webhookUrl: `${baseUrl(request)}/api/telegram/webhook`,
+      autoWebhook,
+      // заявки з сайту надходять завжди (вихідний виклик), команди — лише через webhook або polling
+      leadsAlwaysWork: configured,
+      siteUrl,
+      isPublicHttps,
+      webhookUrl: `${siteUrl}/api/telegram/webhook`,
     });
   } catch (e: any) {
     return NextResponse.json({ error: e.message }, { status: 500 });

@@ -25,6 +25,7 @@ const BASE = process.env.BASE_URL || "http://localhost:3000";
 fs.mkdirSync(OUT, { recursive: true });
 
 
+
 const errors = [];
 const results = [];
 const ok = (name, cond, extra = "") => {
@@ -269,6 +270,11 @@ ok("telegram: seeded admin Дмитро listed", /1024336279/.test(tgBody));
 const whUrl = await a.locator('input[readonly]').first().inputValue().catch(() => "");
 ok("telegram: webhook url shown", /\/api\/telegram\/webhook/.test(whUrl), whUrl);
 ok("telegram: how-to-add instructions present", /Як додати адміністратора/.test(tgBody));
+ok("telegram: states that leads work without a webhook", /працює без webhook/.test(tgBody));
+ok("telegram: explains commands need webhook or polling", /webhook або polling/.test(tgBody));
+const tgStatus = await (await fetch(`${BASE}/api/admin/telegram`, { headers: { Authorization: "Bearer " + (await a.evaluate(() => localStorage.getItem("admin_token"))) } })).json();
+ok("telegram API: leadsAlwaysWork=true", tgStatus.leadsAlwaysWork === true);
+ok("telegram API: no auto-webhook on localhost", !tgStatus.autoWebhook, JSON.stringify(tgStatus.autoWebhook));
 await a.screenshot({ path: `${OUT}/20-admin-telegram.png`, fullPage: true });
 
 // модалка добавления админа

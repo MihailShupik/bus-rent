@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { api, ResourceManager, useToast, type FieldDef } from "@/components/admin/ui";
-import { Icon, IconCheck, IconSend, IconUsers } from "@/components/icons";
+import { Icon, IconCheck, IconInbox, IconSend, IconUsers } from "@/components/icons";
 
 type AdminRow = { id: number; name: string; telegram_id: string; role: string; active: boolean };
 
@@ -97,13 +97,24 @@ export default function TelegramAdmin() {
         </div>
 
         <div className="a-stat">
+          <span className="a-stat__icon"><IconInbox size={22} /></span>
+          <strong style={{ fontSize: 18 }}>Заявки з сайту</strong>
+          <span>надходять адміністраторам</span>
+          <div style={{ marginTop: 8 }}>
+            {status?.leadsAlwaysWork
+              ? <span className="a-badge a-badge--on"><IconCheck size={12} /> працює без webhook</span>
+              : <span className="a-badge a-badge--off">немає токена</span>}
+          </div>
+        </div>
+
+        <div className="a-stat">
           <span className="a-stat__icon"><Icon name="world" size={22} /></span>
-          <strong style={{ fontSize: 18 }}>{webhookConnected ? "Підключено" : "Не підключено"}</strong>
-          <span>Webhook для отримання команд</span>
+          <strong style={{ fontSize: 18 }}>{webhookConnected ? "Працюють" : "Не налаштовано"}</strong>
+          <span>команди бота (webhook)</span>
           <div style={{ marginTop: 8 }}>
             {webhookConnected
               ? <span className="a-badge a-badge--on">Telegram → сайт</span>
-              : <span className="a-badge a-badge--off">команди не працюють</span>}
+              : <span className="a-badge a-badge--off">лише через webhook або polling</span>}
           </div>
         </div>
 
@@ -116,6 +127,25 @@ export default function TelegramAdmin() {
           </div>
         </div>
       </div>
+
+      {status?.autoWebhook?.ok && (
+        <div className="a-hint" style={{ marginBottom: 18 }}>
+          <b>Webhook підключено автоматично.</b> Зареєстровано адресу <code>{status.autoWebhook.url}</code> —
+          команди бота вже працюють. Більше нічого робити не потрібно.
+        </div>
+      )}
+      {status?.autoWebhook && !status.autoWebhook.ok && (
+        <div className="a-error" style={{ marginBottom: 18 }}>
+          Не вдалося автоматично підключити webhook: {status.autoWebhook.error}. Скористайтесь кнопкою нижче.
+        </div>
+      )}
+      {!status?.isPublicHttps && status?.configured && (
+        <div className="a-hint" style={{ marginBottom: 18 }}>
+          Локальний запуск: Telegram не може достукатись до <code>localhost</code>. Заявки працюють,
+          а команди перевіряйте через <code>node scripts/telegram-poll.mjs</code>. У хмарі (Vercel, HTTPS)
+          webhook підключиться автоматично.
+        </div>
+      )}
 
       {/* ------------------------------- actions ------------------------------ */}
       <div className="a-card" style={{ marginBottom: 18 }}>
