@@ -37,7 +37,8 @@ fi
 echo "→ Змінні беру з $ENV_FILE"
 
 read_env() {
-  grep -E "^$1=" "$ENV_FILE" | head -1 | cut -d= -f2- || true
+  # прибираємо лапки, які міг додати neon CLI
+  grep -E "^$1=" "$ENV_FILE" | head -1 | cut -d= -f2- | sed -e 's/^"//' -e 's/"$//' -e "s/^'//" -e "s/'$//" || true
 }
 
 REQUIRED=(DATABASE_URL JWT_SECRET ADMIN_EMAIL ADMIN_PASSWORD)
