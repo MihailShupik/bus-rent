@@ -33,6 +33,8 @@ export async function ensureSchema() {
     rental_terms TEXT DEFAULT '',
     price TEXT DEFAULT '',
     price_unit TEXT DEFAULT 'година',
+    currency TEXT DEFAULT '',
+    currency_custom TEXT DEFAULT '',
     photos TEXT[] DEFAULT '{}',
     photo_captions TEXT[] DEFAULT '{}',
     main_photo TEXT DEFAULT '',
@@ -164,6 +166,8 @@ export async function ensureSchema() {
   await sql(`ALTER TABLE buses ADD COLUMN IF NOT EXISTS rental_terms TEXT DEFAULT ''`).catch(() => {});
   await sql(`ALTER TABLE buses ADD COLUMN IF NOT EXISTS bus_type TEXT DEFAULT ''`).catch(() => {});
   await sql(`ALTER TABLE buses ADD COLUMN IF NOT EXISTS photo_captions TEXT[] DEFAULT '{}'`).catch(() => {});
+  await sql(`ALTER TABLE buses ADD COLUMN IF NOT EXISTS currency TEXT DEFAULT ''`).catch(() => {});
+  await sql(`ALTER TABLE buses ADD COLUMN IF NOT EXISTS currency_custom TEXT DEFAULT ''`).catch(() => {});
   await sql(`ALTER TABLE applications ADD COLUMN IF NOT EXISTS route TEXT DEFAULT ''`).catch(() => {});
   await sql(`ALTER TABLE applications ADD COLUMN IF NOT EXISTS passengers TEXT DEFAULT ''`).catch(() => {});
 

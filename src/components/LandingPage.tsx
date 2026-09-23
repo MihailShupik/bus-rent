@@ -8,6 +8,7 @@ import {
 import { companyName as fbCompany, contacts as fbContacts, navItems } from "@/config/site";
 import type { SiteData } from "@/lib/content";
 import { isValidPhone, mainPhotoOf, photoGallery, priceUnit as normalizePriceUnit } from "@/lib/format";
+import { resolveCurrency } from "@/lib/currencies";
 
 type Props = { initialData: SiteData | null };
 
@@ -264,6 +265,8 @@ export default function LandingPage({ initialData }: Props) {
   const busPhotos = (b: any) => photoGallery(b);
   const money = (v: string) => (v || "").toString();
   const priceUnit = (u: string) => normalizePriceUnit(u);
+  /** Символ валюти для конкретного транспорту (з урахуванням загального налаштування). */
+  const busCurrency = (b: any) => resolveCurrency(b, data.settings?.default_currency);
 
   if (ready && loadError && !data.buses.length && !data.services.length) {
     return (
@@ -469,7 +472,7 @@ TELEGRAM_BOT_TOKEN=<токен від @BotFather>`}
                     {b.rental_terms && <div className="bus-card__terms">Умови: {b.rental_terms}</div>}
                     <div className="bus-card__price-row">
                       <div className="bus-card__price">
-                        <strong>{b.price ? `від ${money(b.price)} €` : "за запитом"}</strong>
+                        <strong>{b.price ? `від ${money(b.price)} ${busCurrency(b)}` : "за запитом"}</strong>
                         <span> / {priceUnit(b.price_unit)}</span>
                       </div>
                       <button className="btn btn--accent" onClick={() => goToForm(`${b.name}${b.seats ? ` (${b.seats} місць)` : ""}`)}>
@@ -809,7 +812,7 @@ TELEGRAM_BOT_TOKEN=<токен від @BotFather>`}
                   <div className="bus-card__model">{[galleryBus.brand, galleryBus.model].filter(Boolean).join(" · ")}{galleryBus.year ? ` · ${galleryBus.year}` : ""}</div>
                 </div>
                 <div className="bus-card__price" style={{ textAlign: "right" }}>
-                  <strong>{galleryBus.price ? `від ${galleryBus.price} €` : "за запитом"}</strong>
+                  <strong>{galleryBus.price ? `від ${galleryBus.price} ${busCurrency(galleryBus)}` : "за запитом"}</strong>
                   <span> / {priceUnit(galleryBus.price_unit)}</span>
                 </div>
               </div>

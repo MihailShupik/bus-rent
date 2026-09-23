@@ -40,6 +40,10 @@ describe("priceLabel", () => {
   it("renders a price with unit", () => {
     expect(priceLabel("80", "година")).toBe("від 80 € / година");
   });
+  it("uses the given currency symbol", () => {
+    expect(priceLabel("2500", "день", "₴")).toBe("від 2500 ₴ / день");
+    expect(priceLabel("120", "година", "$")).toBe("від 120 $ / година");
+  });
   it("returns a fallback when the price is empty", () => {
     expect(priceLabel("", "день")).toBe("за запитом");
     expect(priceLabel(null, null)).toBe("за запитом");

@@ -5,6 +5,7 @@ export const defaultSettings: Record<string, string> = {
   company_name: "BusRent",
   logo_text: "BusRent",
   logo_image: "",
+  default_currency: "EUR",
   header_subtitle: "Пасажирські перевезення та оренда автобусів",
 
   phone_display: "+380 44 123 45 67",

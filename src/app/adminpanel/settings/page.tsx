@@ -2,8 +2,9 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { api, ImageField, ListEditor, TextField, useToast } from "@/components/admin/ui";
+import { CURRENCIES } from "@/lib/currencies";
 
-type Def = { key: string; label: string; type?: "text" | "textarea" | "image" | "list"; hint?: string };
+type Def = { key: string; label: string; type?: "text" | "textarea" | "image" | "list" | "select"; hint?: string; options?: { value: string; label: string }[] };
 
 const GROUPS: { title: string; defs: Def[] }[] = [
   {
@@ -14,6 +15,11 @@ const GROUPS: { title: string; defs: Def[] }[] = [
       { key: "header_subtitle", label: "Підзаголовок у шапці" },
       { key: "working_hours", label: "Графік роботи" },
       { key: "area", label: "Регіон роботи" },
+      {
+        key: "default_currency", label: "Валюта цін за замовчуванням", type: "select",
+        options: CURRENCIES.map((c) => ({ value: c.code, label: `${c.symbol} — ${c.label} (${c.code})` })),
+        hint: "Використовується для транспорту, де валюта не вказана окремо",
+      },
     ],
   },
   {
@@ -156,6 +162,19 @@ export default function SettingsAdmin() {
               const span = d.type === "textarea" || d.type === "image" || d.type === "list";
               if (d.type === "image") {
                 return <div key={d.key} className="span2"><ImageField label={d.label} value={v} onChange={(nv) => set(d.key, nv)} /></div>;
+              }
+              if (d.type === "select") {
+                return (
+                  <div key={d.key}>
+                    <div className="a-field">
+                      <label>{d.label}</label>
+                      <select value={v} onChange={(e) => set(d.key, e.target.value)}>
+                        {(d.options || []).map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
+                      </select>
+                      {d.hint && <small>{d.hint}</small>}
+                    </div>
+                  </div>
+                );
               }
               if (d.type === "list") {
                 let list: string[] = [];
