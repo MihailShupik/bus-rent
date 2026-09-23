@@ -44,7 +44,7 @@ export default function LoginPage() {
         <form onSubmit={submit}>
           <div className="a-field">
             <label>Email</label>
-            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="admin@bus-rent.ua" required autoFocus />
+            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="your@email.com" required autoFocus />
           </div>
           <div className="a-field">
             <label>Пароль</label>
@@ -55,10 +55,6 @@ export default function LoginPage() {
           </button>
         </form>
 
-        <div className="a-hint">
-          Дані за замовчуванням: <strong>admin@bus-rent.ua</strong> / <strong>busrent2026</strong><br />
-          Змініть їх через змінні середовища <strong>ADMIN_EMAIL</strong> і <strong>ADMIN_PASSWORD</strong>.
-        </div>
       </div>
     </div>
   );

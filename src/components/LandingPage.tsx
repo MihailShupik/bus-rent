@@ -197,7 +197,7 @@ export default function LandingPage({ initialData }: Props) {
           <pre style={{ background: "#0d2137", color: "#e6eef7", padding: 16, borderRadius: 12, fontSize: 13, overflowX: "auto", lineHeight: 1.7 }}>
 {`DATABASE_URL=postgresql://...neon.tech/neondb?sslmode=require
 JWT_SECRET=<довільний довгий рядок>
-ADMIN_EMAIL=admin@bus-rent.ua
+ADMIN_EMAIL=<ваш email>
 ADMIN_PASSWORD=<ваш пароль>
 TELEGRAM_BOT_TOKEN=<токен від @BotFather>`}
           </pre>
