@@ -209,6 +209,19 @@ export default function LandingPage({ initialData }: Props) {
 
   const customTypes = (data.contentTypes || []).filter((t) => !KNOWN_TYPES.includes(t.slug) && t.active !== false);
 
+  /** Показники картки «Автопарк онлайн»: редагуються в адмінці, а якщо порожні -
+   *  підставляються реальні дані каталогу. */
+  const seatNumbers = (data.buses || []).map((b: any) => Number(b.seats)).filter((n: number) => n > 0);
+  const seatsRange = seatNumbers.length
+    ? `${Math.min(...seatNumbers)}-${Math.max(...seatNumbers)}`
+    : "17-55";
+  const heroStats = [
+    { value: s("hero_stat1_value", `${(data.buses || []).length || 0}+`), label: s("hero_stat1_label", "моделей транспорту") },
+    { value: s("hero_stat2_value", seatsRange), label: s("hero_stat2_label", "пасажирських місць") },
+    { value: s("hero_stat3_value", "24/7"), label: s("hero_stat3_label", "прийом замовлень") },
+    { value: s("hero_stat4_value", `0 ${resolveCurrency(undefined, data.settings?.default_currency)}`), label: s("hero_stat4_label", "вартість розрахунку") },
+  ];
+
   const goToForm = (busName?: string) => {
     if (busName !== undefined) setForm((f) => ({ ...f, bus: busName }));
     setTimeout(() => {
@@ -400,17 +413,16 @@ TELEGRAM_BOT_TOKEN=<токен від @BotFather>`}
             </div>
 
             <aside className="hero__card">
-              <h3>Автопарк онлайн</h3>
-              <p>Підберемо транспорт під кількість пасажирів і маршрут</p>
+              <h3>{s("hero_card_title", "Автопарк онлайн")}</h3>
+              <p>{s("hero_card_subtitle", "Підберемо транспорт під кількість пасажирів і маршрут")}</p>
               <div className="hero__stat-grid">
-                <div className="hero__stat"><strong>{data.buses.length || 8}+</strong><span>моделей транспорту</span></div>
-                <div className="hero__stat"><strong>17-55</strong><span>пасажирських місць</span></div>
-                <div className="hero__stat"><strong>24/7</strong><span>прийом замовлень</span></div>
-                <div className="hero__stat"><strong>0 €</strong><span>вартість розрахунку</span></div>
+                {heroStats.map((st, i) => (
+                  <div className="hero__stat" key={i}><strong>{st.value}</strong><span>{st.label}</span></div>
+                ))}
               </div>
               <div className="hero__trust">
-                <div><IconSteering size={18} /> Досвідчені водії</div>
-                <div><IconCheck size={18} /> Подача за адресою</div>
+                <div><IconSteering size={18} /> {s("hero_trust1", "Досвідчені водії")}</div>
+                <div><IconCheck size={18} /> {s("hero_trust2", "Подача за адресою")}</div>
               </div>
             </aside>
           </div>
@@ -435,7 +447,7 @@ TELEGRAM_BOT_TOKEN=<токен від @BotFather>`}
               <img src={data.settings.about_image} alt="Автопарк" />
               <div className="about-badge">
                 <span className="about-badge__mark"><IconBus size={24} /></span>
-                <span><strong>{s("about_buses", "40")}+</strong><span>автобусів у власному парку</span></span>
+                <span><strong>{s("about_buses", "40")}+</strong><span>{s("about_badge_label", "автобусів у власному парку")}</span></span>
               </div>
             </div>
             )}
@@ -664,7 +676,7 @@ TELEGRAM_BOT_TOKEN=<токен від @BotFather>`}
                   <button className="btn btn--accent btn--lg btn--block" type="submit" disabled={status === "sending"} style={{ marginTop: 18, opacity: status === "sending" ? 0.7 : 1 }}>
                     <IconSend size={18} /> {status === "sending" ? "Надсилаємо..." : s("form_button", "Отримати розрахунок вартості")}
                   </button>
-                  <p className="form-note">Натискаючи кнопку, ви погоджуєтесь на обробку даних. Ми не передаємо інформацію третім особам.</p>
+                  <p className="form-note">{s("form_note", "Натискаючи кнопку, ви погоджуєтесь на обробку даних. Ми не передаємо інформацію третім особам.")}</p>
                 </form>
               )}
             </div>
@@ -757,7 +769,7 @@ TELEGRAM_BOT_TOKEN=<токен від @BotFather>`}
             </div>
           </div>
           <div className="footer__bottom">
-            <span>© {new Date().getFullYear()} {s("company_name", fbCompany)}. Усі права захищено.</span>
+            <span>© {new Date().getFullYear()} {s("company_name", fbCompany)}. {s("footer_copyright", "Усі права захищено.")}</span>
             <span>{contacts.workingHours} · {contacts.area}</span>
           </div>
         </div>

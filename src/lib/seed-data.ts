@@ -31,6 +31,18 @@ export const defaultSettings: Record<string, string> = {
     "Працюємо 24/7 без вихідних",
   ]),
   hero_button_primary: "Розрахувати вартість",
+  hero_card_title: "Автопарк онлайн",
+  hero_card_subtitle: "Підберемо транспорт під кількість пасажирів і маршрут",
+  hero_stat1_value: "",
+  hero_stat1_label: "моделей транспорту",
+  hero_stat2_value: "",
+  hero_stat2_label: "пасажирських місць",
+  hero_stat3_value: "24/7",
+  hero_stat3_label: "прийом замовлень",
+  hero_stat4_value: "",
+  hero_stat4_label: "вартість розрахунку",
+  hero_trust1: "Досвідчені водії",
+  hero_trust2: "Подача за адресою",
   hero_button_whatsapp: "Написати у WhatsApp",
   hero_button_viber: "Написати у Viber",
 
@@ -46,6 +58,7 @@ export const defaultSettings: Record<string, string> = {
   about_stat_buses: "автобусів у парку",
   about_stat_trips: "виконаних поїздок",
   about_stat_clients: "задоволених клієнтів",
+  about_badge_label: "автобусів у власному парку",
 
   buses_label: "Наш транспорт",
   buses_title: "Автобуси та мікроавтобуси",
@@ -73,6 +86,8 @@ export const defaultSettings: Record<string, string> = {
   contacts_title: "Зв'яжіться з нами",
   contacts_text: "Зателефонуйте, напишіть у месенджер або залиште заявку - відповідаємо швидко.",
 
+  footer_copyright: "Усі права захищено.",
+  form_note: "Натискаючи кнопку, ви погоджуєтесь на обробку даних. Ми не передаємо інформацію третім особам.",
   footer_text:
     "Пасажирські перевезення, оренда автобусів і мікроавтобусів, трансфери та міжміські рейси по Україні.",
 
