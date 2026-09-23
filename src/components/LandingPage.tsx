@@ -405,6 +405,9 @@ TELEGRAM_BOT_TOKEN=<токен від @BotFather>`}
                       <IconTelegram size={18} color="#fff" /> Telegram
                     </a>
                   )}
+                  <a className="btn btn--call btn--lg" href={links.phone} onClick={() => track("click_phone")}>
+                    <IconPhone size={18} color="#fff" /> {s("hero_button_call", "Зателефонувати")}
+                  </a>
                 </div>
               </div>
               <ul className="hero__points">

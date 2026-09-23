@@ -74,6 +74,7 @@ h1, h2, h3, h4 { line-height: 1.18; font-weight: 800; letter-spacing: -0.02em; }
 .btn--wa { background: #25d366; color: #fff; box-shadow: 0 10px 24px rgba(37, 211, 102, 0.3); }
 .btn--viber { background: #7360f2; color: #fff; box-shadow: 0 10px 24px rgba(115, 96, 242, 0.3); }
 .btn--tg { background: #229ED9; color: #fff; box-shadow: 0 10px 24px rgba(34, 158, 217, 0.3); }
+.btn--call { background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #fff; box-shadow: 0 10px 24px rgba(255, 122, 26, 0.34); }
 .btn--outline { background: #fff; color: var(--navy); border: 1.5px solid var(--line); }
 .btn--outline:hover { border-color: var(--accent); color: var(--accent); }
 .btn--lg { padding: 13px 22px; font-size: 14.5px; }
@@ -156,7 +157,10 @@ h1, h2, h3, h4 { line-height: 1.18; font-weight: 800; letter-spacing: -0.02em; }
 .hero h1 { font-size: clamp(25px, 4.2vw, 50px); margin-bottom: 16px; }
 .hero__text { font-size: clamp(14.5px, 1.5vw, 18px); color: rgba(255, 255, 255, 0.82); max-width: 620px; margin-bottom: 24px; }
 .hero__actions { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; margin-bottom: 34px; }
-.hero__messengers { display: flex; flex-wrap: wrap; gap: 10px; }
+.hero__messengers { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; width: 100%; max-width: 560px; }
+.hero__messengers .btn { width: 100%; min-width: 0; }
+/* якщо кнопок непарна кількість — остання розтягується на весь рядок */
+.hero__messengers .btn:last-child:nth-child(odd) { grid-column: 1 / -1; }
 .hero__points { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 22px; }
 .hero__points li { display: flex; align-items: center; gap: 10px; list-style: none; font-size: 15px; color: rgba(255, 255, 255, 0.92); }
 .hero__points svg { flex: none; color: var(--accent); }
