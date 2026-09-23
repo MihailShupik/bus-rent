@@ -15,8 +15,8 @@ describe("currencySymbol", () => {
     expect(currencySymbol("XYZ")).toBe("XYZ");
   });
   it("falls back to the default symbol when empty", () => {
-    expect(currencySymbol("")).toBe("€");
-    expect(currencySymbol(null)).toBe("€");
+    expect(currencySymbol("")).toBe("₴");
+    expect(currencySymbol(null)).toBe("₴");
     expect(currencySymbol(undefined)).toBe(currencySymbol(DEFAULT_CURRENCY));
   });
 });
@@ -31,8 +31,8 @@ describe("resolveCurrency", () => {
   it("falls back to the site default", () => {
     expect(resolveCurrency({ currency: "" }, "USD")).toBe("$");
   });
-  it("falls back to euro when nothing is set", () => {
-    expect(resolveCurrency({}, "")).toBe("€");
-    expect(resolveCurrency(undefined, undefined)).toBe("€");
+  it("falls back to the default currency when nothing is set", () => {
+    expect(resolveCurrency({}, "")).toBe("₴");
+    expect(resolveCurrency(undefined, undefined)).toBe("₴");
   });
 });

@@ -26,7 +26,7 @@ export const CURRENCIES: Currency[] = [
   { code: "CNY", symbol: "¥", label: "Китайський юань" },
 ];
 
-export const DEFAULT_CURRENCY = "EUR";
+export const DEFAULT_CURRENCY = "UAH";
 
 /** Символ валюти за кодом (якщо код невідомий — повертаємо його самого). */
 export function currencySymbol(code?: string | null): string {

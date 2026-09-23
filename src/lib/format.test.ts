@@ -38,7 +38,7 @@ describe("priceUnit", () => {
 
 describe("priceLabel", () => {
   it("renders a price with unit", () => {
-    expect(priceLabel("80", "година")).toBe("від 80 € / година");
+    expect(priceLabel("80", "година")).toBe("від 80 ₴ / година");
   });
   it("uses the given currency symbol", () => {
     expect(priceLabel("2500", "день", "₴")).toBe("від 2500 ₴ / день");

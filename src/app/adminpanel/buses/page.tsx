@@ -16,10 +16,10 @@ const fields: FieldDef[] = [
   {
     key: "price_unit", label: "Одиниця розрахунку", type: "select",
     options: [
-      { value: "година", label: "€ / година" },
-      { value: "день", label: "€ / день" },
-      { value: "поїздка", label: "€ / поїздка" },
-      { value: "км", label: "€ / км" },
+      { value: "година", label: "за годину" },
+      { value: "день", label: "за день" },
+      { value: "поїздка", label: "за поїздку" },
+      { value: "км", label: "за кілометр" },
     ],
   },
   {

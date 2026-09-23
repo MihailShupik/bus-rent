@@ -28,7 +28,7 @@ export function priceUnit(unit?: string | null): string {
 }
 
 /** Human readable price, e.g. "від 80 € / година". Валюта задається символом. */
-export function priceLabel(price?: string | number | null, unit?: string | null, symbol = "€"): string {
+export function priceLabel(price?: string | number | null, unit?: string | null, symbol = "₴"): string {
   const p = price === null || price === undefined ? "" : String(price).trim();
   if (!p) return "за запитом";
   return `від ${p} ${symbol} / ${priceUnit(unit)}`;
