@@ -51,15 +51,20 @@ async function newPage(w = 1440, h = 900) {
 }
 
 async function autoScroll(p) {
-  await p.evaluate(async () => {
-    const step = Math.round(window.innerHeight * 0.7);
-    for (let y = 0; y < document.body.scrollHeight; y += step) {
-      window.scrollTo(0, y);
-      await new Promise((r) => setTimeout(r, 120));
-    }
-    window.scrollTo(0, 0);
-    await new Promise((r) => setTimeout(r, 200));
-  });
+  // два проходи: сторінка може «підрости» через ліниве завантаження зображень
+  for (let pass = 0; pass < 2; pass++) {
+    await p.evaluate(async () => {
+      const step = Math.round(window.innerHeight * 0.6);
+      for (let y = 0; y < document.body.scrollHeight; y += step) {
+        window.scrollTo(0, y);
+        await new Promise((r) => setTimeout(r, 160));
+      }
+      window.scrollTo(0, document.body.scrollHeight);
+      await new Promise((r) => setTimeout(r, 400));
+    });
+  }
+  await p.evaluate(() => window.scrollTo(0, 0));
+  await p.waitForTimeout(400);
 }
 
 /* ============================ LANDING: desktop ============================ */
@@ -118,8 +123,8 @@ await page.waitForTimeout(600);
 await page.screenshot({ path: `${OUT}/01-landing-desktop-full.png`, fullPage: true });
 
 /* -------- scroll reveal: every reveal element becomes visible -------- */
-await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
-await page.waitForTimeout(1200);
+await autoScroll(page);
+await page.waitForTimeout(1000);
 const hiddenReveal = await page.locator(".reveal:not(.reveal--visible)").count();
 ok("scroll reveal activates elements", hiddenReveal === 0, "still hidden=" + hiddenReveal);
 
@@ -338,7 +343,13 @@ ok("landing: meta description present", !!desc && desc.length > 30, String(desc)
 const ogTitle = await l.locator('meta[property="og:title"]').first().getAttribute("content").catch(() => null);
 ok("landing: open graph tags present", !!ogTitle, String(ogTitle));
 const tgLinks = await l.locator('a[href*="t.me"]').count();
-ok("landing: Telegram contact rendered", tgLinks > 0, "t.me links=" + tgLinks);
+const liveSettings = await (await fetch(`${BASE}/api/content`)).json().catch(() => ({}));
+const tgConfigured = !!(liveSettings?.settings?.telegram_username || "").trim();
+ok(
+  "landing: Telegram contact matches the settings",
+  tgConfigured ? tgLinks > 0 : tgLinks === 0,
+  `configured=${tgConfigured} links=${tgLinks}`
+);
 const waLinks = await l.locator('a[href*="wa.me"]').count();
 const vbLinks = await l.locator('a[href*="viber://"]').count();
 const telLinks = await l.locator('a[href^="tel:"]').count();
