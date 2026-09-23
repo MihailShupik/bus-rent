@@ -137,7 +137,7 @@ if (burger) {
   await a.locator(".a-overlay").click({ position: { x: 380, y: 700 } }).catch(() => {});
   await a.waitForTimeout(500);
 }
-for (const route of ["buses", "applications", "telegram", "settings", "builder"]) {
+for (const route of ["analytics", "buses", "applications", "telegram", "settings", "builder", "system"]) {
   await a.goto(`${BASE}/adminpanel/${route}`, { waitUntil: "domcontentloaded", timeout: 60000 });
   await a.waitForTimeout(1200);
   const rr = await a.evaluate(() => ({ sw: document.documentElement.scrollWidth, vw: document.documentElement.clientWidth }));

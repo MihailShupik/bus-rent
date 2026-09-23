@@ -12,6 +12,7 @@ import { ToastProvider } from "@/components/admin/ui";
 const NAV = [
   { group: "Огляд" },
   { href: "/adminpanel/dashboard", label: "Дашборд", icon: "grid" },
+  { href: "/adminpanel/analytics", label: "Аналітика", icon: "trend" },
   { href: "/adminpanel/applications", label: "Заявки", icon: "inbox" },
   { group: "Контент" },
   { href: "/adminpanel/buses", label: "Автобуси", icon: "bus" },

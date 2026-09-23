@@ -101,9 +101,20 @@ export async function ensureSchema() {
     utm_campaign TEXT DEFAULT '',
     user_agent TEXT DEFAULT '',
     ip_address TEXT DEFAULT '',
+    session_id TEXT DEFAULT '',
+    device TEXT DEFAULT '',
+    screen TEXT DEFAULT '',
+    value INT DEFAULT 0,
     created_at TIMESTAMPTZ DEFAULT NOW()
   )`);
-  await sql(`CREATE INDEX IF NOT EXISTS idx_events_type ON analytics_events (event_type)`);
+  // міграції для баз, створених раніше (мають бути ДО створення індексів)
+  await sql(`ALTER TABLE analytics_events ADD COLUMN IF NOT EXISTS session_id TEXT DEFAULT ''`).catch(() => {});
+  await sql(`ALTER TABLE analytics_events ADD COLUMN IF NOT EXISTS device TEXT DEFAULT ''`).catch(() => {});
+  await sql(`ALTER TABLE analytics_events ADD COLUMN IF NOT EXISTS screen TEXT DEFAULT ''`).catch(() => {});
+  await sql(`ALTER TABLE analytics_events ADD COLUMN IF NOT EXISTS value INT DEFAULT 0`).catch(() => {});
+  await sql(`CREATE INDEX IF NOT EXISTS idx_events_type ON analytics_events (event_type)`).catch(() => {});
+  await sql(`CREATE INDEX IF NOT EXISTS idx_events_created ON analytics_events (created_at)`).catch(() => {});
+  await sql(`CREATE INDEX IF NOT EXISTS idx_events_session ON analytics_events (session_id)`).catch(() => {});
 
   await sql(`CREATE TABLE IF NOT EXISTS media (
     id SERIAL PRIMARY KEY,

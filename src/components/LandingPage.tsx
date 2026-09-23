@@ -15,6 +15,20 @@ const emptyData: SiteData = { settings: {}, buses: [], services: [], advantages:
 
 const KNOWN_TYPES = ["advantages", "steps"];
 
+/** Стабільний ідентифікатор відвідувача в межах браузера (для унікальних сесій). */
+function sessionId(): string {
+  try {
+    let id = localStorage.getItem("br_sid");
+    if (!id) {
+      id = Math.random().toString(36).slice(2) + Date.now().toString(36);
+      localStorage.setItem("br_sid", id);
+    }
+    return id;
+  } catch {
+    return "";
+  }
+}
+
 /**
  * Логотип компанії: завантажений з адмінки показуємо як звичайне зображення
  * (без рамок-«коробок»), інакше - стандартна SVG-іконка автобуса.
@@ -39,6 +53,32 @@ export default function LandingPage({ initialData }: Props) {
   const [errorText, setErrorText] = useState("");
   const formAnchor = useRef<HTMLDivElement>(null);
 
+  // ------------------------------- аналітика -------------------------------
+  const track = (type: string, value = "", num = 0) => {
+    if (typeof window === "undefined") return;
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const body = JSON.stringify({
+        event_type: type,
+        event_data: String(value).slice(0, 300),
+        value: num,
+        page_url: window.location.href,
+        referrer: document.referrer || "",
+        utm_source: params.get("utm_source") || "",
+        utm_medium: params.get("utm_medium") || "",
+        utm_campaign: params.get("utm_campaign") || "",
+        session_id: sessionId(),
+        screen: `${window.innerWidth}x${window.innerHeight}`,
+      });
+      if (navigator.sendBeacon) {
+        navigator.sendBeacon("/api/track", new Blob([body], { type: "application/json" }));
+      } else {
+        fetch("/api/track", { method: "POST", headers: { "Content-Type": "application/json" }, body, keepalive: true }).catch(() => {});
+      }
+    } catch {}
+  };
+
+
   /* ---------------------------- data loading ---------------------------- */
   useEffect(() => {
     if (initialData) {
@@ -53,8 +93,57 @@ export default function LandingPage({ initialData }: Props) {
       })
       .catch((e) => setLoadError(String(e?.message || e)))
       .finally(() => setReady(true));
+    // дані завантажуються один раз при монтуванні
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  /* ------------------------------ analytics ----------------------------- */
+  useEffect(() => {
+    if (!ready || typeof window === "undefined") return;
+
+    // перегляд сторінки (один раз на завантаження)
+    track("page_view");
+
+    // які блоки користувач реально побачив
+    const seen = new Set<string>();
+    const sections = Array.from(document.querySelectorAll<HTMLElement>("section[id]"));
+    const io = new IntersectionObserver(
+      (entries) => entries.forEach((e) => {
+        if (!e.isIntersecting) return;
+        const id = (e.target as HTMLElement).id;
+        if (seen.has(id)) return;
+        seen.add(id);
+        track("section_view", id);
+      }),
+      // будь-яка помітна частина блоку (високі секції не досягають 35%)
+      { threshold: 0, rootMargin: "0px 0px -15% 0px" }
+    );
+    sections.forEach((el) => io.observe(el));
+
+    // глибина прокрутки (25/50/75/100 %)
+    const marks = [25, 50, 75, 100];
+    const passed = new Set<number>();
+    const onScroll = () => {
+      const h = document.documentElement.scrollHeight - window.innerHeight;
+      const p = h > 0 ? Math.round((window.scrollY / h) * 100) : 100;
+      marks.forEach((m) => { if (p >= m && !passed.has(m)) { passed.add(m); track("scroll_depth", String(m), m); } });
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+
+    // час на сторінці (надсилаємо при виході)
+    const started = Date.now();
+    const sendTime = () => {
+      const secs = Math.round((Date.now() - started) / 1000);
+      if (secs >= 3) track("time_on_page", String(secs), secs);
+    };
+    window.addEventListener("pagehide", sendTime);
+
+    return () => {
+      io.disconnect();
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("pagehide", sendTime);
+    };
+  }, [ready]);
 
   /* --------------------------- reveal on scroll -------------------------- */
   useEffect(() => {
@@ -119,16 +208,6 @@ export default function LandingPage({ initialData }: Props) {
 
   const customTypes = (data.contentTypes || []).filter((t) => !KNOWN_TYPES.includes(t.slug) && t.active !== false);
 
-  const track = (type: string, value = "") => {
-    try {
-      fetch("/api/track", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ event_type: type, event_data: value, page_url: typeof window !== "undefined" ? window.location.href : "" }),
-      }).catch(() => {});
-    } catch {}
-  };
-
   const goToForm = (busName?: string) => {
     if (busName !== undefined) setForm((f) => ({ ...f, bus: busName }));
     setTimeout(() => {
@@ -137,7 +216,8 @@ export default function LandingPage({ initialData }: Props) {
       el?.focus({ preventScroll: true });
     }, 60);
     setDrawer(false);
-    track("cta_to_form", busName || "");
+    if (busName) track("click_order", busName);
+    else track("cta_to_form", "");
   };
 
   const submit = async (e: React.FormEvent) => {
@@ -176,7 +256,7 @@ export default function LandingPage({ initialData }: Props) {
   const openGallery = (bus: any) => {
     setGalleryBus(bus);
     setActivePhoto(0);
-    track("view_bus", bus.name);
+    track("view_bus", bus.name, Number(bus.price) || 0);
   };
 
   const busPhoto = (b: any) => mainPhotoOf(b);
