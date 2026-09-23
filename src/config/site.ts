@@ -1,16 +1,19 @@
 export const companyName = "BusRent";
 
+// Резервні значення, якщо налаштування взагалі відсутнє в базі.
+// Навмисно ПОРОЖНІ: жодних вигаданих телефонів/адрес — порожнє поле
+// в адмінці має лишатися порожнім на сайті, а не підмінятися заглушкою.
 export const contacts = {
-  phoneDisplay: "+380 44 123 45 67",
-  phoneRaw: "+380441234567",
-  phoneDisplay2: "+380 67 123 45 67",
-  phoneRaw2: "+380671234567",
-  viberRaw: "+380441234567",
-  whatsappRaw: "380441234567",
-  email: "info@bus-rent.ua",
-  address: "м. Київ, вул. Транспортна, 12",
+  phoneDisplay: "",
+  phoneRaw: "",
+  phoneDisplay2: "",
+  phoneRaw2: "",
+  viberRaw: "",
+  whatsappRaw: "",
+  email: "",
+  address: "",
   workingHours: "Працюємо 24/7",
-  area: "Київ та Україна, міжнародні рейси",
+  area: "",
 } as const;
 
 export const socialLinks = {
