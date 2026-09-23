@@ -79,7 +79,13 @@ const heroH1 = await page.locator("h1").first().innerText();
 ok("hero h1 non-empty", heroH1.trim().length > 5, heroH1.slice(0, 60));
 
 const busCards = await page.locator(".bus-card").count();
-ok("bus cards rendered", busCards >= 8, "count=" + busCards);
+const catalogue = await (await fetch(`${BASE}/api/content`)).json().catch(() => ({}));
+const expectedBuses = (catalogue?.buses || []).length;
+ok(
+  "bus cards match the catalogue",
+  busCards > 0 && busCards === expectedBuses,
+  `cards=${busCards} active=${expectedBuses}`
+);
 
 const serviceCards = await page.locator(".service-card").count();
 ok("service cards rendered", serviceCards >= 6, "count=" + serviceCards);
