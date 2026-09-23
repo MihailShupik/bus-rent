@@ -842,7 +842,25 @@ TELEGRAM_BOT_TOKEN=<токен від @BotFather>`}
                 <button className="btn btn--accent btn--lg" onClick={() => { setGalleryBus(null); goToForm(`${galleryBus.name}${galleryBus.seats ? ` (${galleryBus.seats} місць)` : ""}`); }}>
                   <IconSend size={16} /> Замовити цей транспорт
                 </button>
-                <a className="btn btn--wa btn--lg" href={links.whatsapp} target="_blank" rel="noreferrer"><IconWhatsApp size={18} color="#fff" /> Запитати у WhatsApp</a>
+                {/* усі способи зв'язку щодо цього автобуса */}
+                <a className="btn btn--wa btn--lg" href={links.whatsapp} target="_blank" rel="noreferrer"
+                  onClick={() => track("click_whatsapp", galleryBus.name)}>
+                  <IconWhatsApp size={18} color="#fff" /> Запитати у WhatsApp
+                </a>
+                <a className="btn btn--viber btn--lg" href={links.viber} target="_blank" rel="noreferrer"
+                  onClick={() => track("click_viber", galleryBus.name)}>
+                  <IconViber size={18} color="#fff" /> Запитати у Viber
+                </a>
+                {links.telegram && (
+                  <a className="btn btn--tg btn--lg" href={links.telegram} target="_blank" rel="noreferrer"
+                    onClick={() => track("click_telegram", galleryBus.name)}>
+                    <IconTelegram size={18} color="#fff" /> Telegram
+                  </a>
+                )}
+                <a className="btn btn--outline btn--lg" href={links.phone}
+                  onClick={() => track("click_phone", galleryBus.name)}>
+                  <IconPhone size={18} /> {contacts.phoneDisplay}
+                </a>
               </div>
             </div>
           </div>
