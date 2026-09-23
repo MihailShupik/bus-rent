@@ -140,14 +140,14 @@ h1, h2, h3, h4 { line-height: 1.18; font-weight: 800; letter-spacing: -0.02em; }
 /* ----------------------------------- Hero ----------------------------------- */
 .hero { position: relative; background: var(--navy); color: #fff; overflow: hidden; }
 .hero__bg { position: absolute; inset: 0; }
-.hero__bg img { width: 100%; height: 100%; object-fit: cover; opacity: 0.55; }
+.hero__bg img { width: 100%; height: 100%; object-fit: cover; object-position: center bottom; opacity: 0.5; }
 .hero__gradient {
   position: absolute; inset: 0;
   background:
     radial-gradient(1100px 520px at 82% 12%, rgba(255, 122, 26, 0.34), transparent 60%),
     linear-gradient(115deg, rgba(8, 20, 34, 0.96) 8%, rgba(10, 27, 45, 0.86) 48%, rgba(12, 33, 55, 0.55) 100%);
 }
-.hero__inner { position: relative; padding: 76px 0 88px; display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 52px; align-items: center; }
+.hero__inner { position: relative; padding-block: 76px 88px; display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 52px; align-items: center; }
 .hero__label {
   display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 999px;
   background: rgba(255, 122, 26, 0.16); border: 1px solid rgba(255, 122, 26, 0.4);
@@ -466,7 +466,7 @@ h1, h2, h3, h4 { line-height: 1.18; font-weight: 800; letter-spacing: -0.02em; }
   .topline__row { font-size: 12.5px; }
   .topline__group--hide { display: none; }
   .section { padding: 62px 0; }
-  .hero__inner { padding: 54px 0 64px; }
+  .hero__inner { padding-block: 54px 64px; }
 }
 @media (max-width: 400px) {
   /* бренд має вміти стискатися, інакше шапка переповнює вузький екран */
