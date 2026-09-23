@@ -375,20 +375,24 @@ TELEGRAM_BOT_TOKEN=<токен від @BotFather>`}
                 {s("hero_subtitle", "Комфортабельні автобуси та мікроавтобуси для поїздок містом, міжміських перевезень, трансферів і заходів.")}
               </p>
               <div className="hero__actions">
+                {/* головна кнопка — окремим рядком */}
                 <button className="btn btn--accent btn--lg" onClick={() => goToForm()}>
                   {s("hero_button_primary", "Розрахувати вартість")} <IconArrowRight size={16} />
                 </button>
-                <a className="btn btn--wa btn--lg" href={links.whatsapp} target="_blank" rel="noreferrer" onClick={() => track("click_whatsapp")}>
-                  <IconWhatsApp size={18} color="#fff" /> {s("hero_button_whatsapp", "WhatsApp")}
-                </a>
-                <a className="btn btn--viber btn--lg" href={links.viber} target="_blank" rel="noreferrer" onClick={() => track("click_viber")}>
-                  <IconViber size={18} color="#fff" /> {s("hero_button_viber", "Viber")}
-                </a>
-                {links.telegram && (
-                  <a className="btn btn--tg btn--lg" href={links.telegram} target="_blank" rel="noreferrer" onClick={() => track("click_telegram")}>
-                    <IconTelegram size={18} color="#fff" /> Telegram
+                {/* месенджери — одним рівнем нижче, в один ряд */}
+                <div className="hero__messengers">
+                  <a className="btn btn--wa btn--lg" href={links.whatsapp} target="_blank" rel="noreferrer" onClick={() => track("click_whatsapp")}>
+                    <IconWhatsApp size={18} color="#fff" /> {s("hero_button_whatsapp", "WhatsApp")}
                   </a>
-                )}
+                  <a className="btn btn--viber btn--lg" href={links.viber} target="_blank" rel="noreferrer" onClick={() => track("click_viber")}>
+                    <IconViber size={18} color="#fff" /> {s("hero_button_viber", "Viber")}
+                  </a>
+                  {links.telegram && (
+                    <a className="btn btn--tg btn--lg" href={links.telegram} target="_blank" rel="noreferrer" onClick={() => track("click_telegram")}>
+                      <IconTelegram size={18} color="#fff" /> Telegram
+                    </a>
+                  )}
+                </div>
               </div>
               <ul className="hero__points">
                 {heroPoints.map((p) => <li key={p}><IconCheck size={18} /> {p}</li>)}
