@@ -33,7 +33,7 @@ export async function GET(request: Request) {
       where += ` AND created_at >= NOW() - INTERVAL '${interval[period]}'`;
     }
 
-    const q = (query: string, extra: any[] = []) => sql(query, [...params, ...extra]);
+    const q = (query: string, extra: any[] = []) => sql(query, /\$\d+/.test(query) ? [...params, ...extra] : extra);
     const appWhere = where.replace(/created_at/g, "applications.created_at");
 
     const [
@@ -80,7 +80,7 @@ export async function GET(request: Request) {
          WHERE event_type IN ('view_bus','click_order') ${where}
          GROUP BY 1 ORDER BY views DESC, orders DESC LIMIT 20`),
 
-      q(`SELECT status, COUNT(*)::int AS count FROM applications GROUP BY 1 ORDER BY count DESC`),
+      q(`SELECT status, COUNT(*)::int AS count FROM applications WHERE 1=1 ${appWhere} GROUP BY 1 ORDER BY count DESC`),
 
       q(`SELECT COALESCE(NULLIF(bus,''),'(не вказано)') AS name, COUNT(*)::int AS count
          FROM applications WHERE 1=1 ${appWhere} GROUP BY 1 ORDER BY count DESC LIMIT 20`),
