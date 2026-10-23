@@ -136,9 +136,23 @@ export default function AnalyticsPage() {
   }));
   const dows = Array.from({ length: 7 }, (_, d) => ({ label: DAYS[d], value: (data?.byDow || []).find((x: any) => x.dow === d)?.count || 0 }));
 
+  const subViews = (from || to)
+    ? `унікальних: ${k.sessions ?? 0}`
+    : period === "today"
+      ? "сьогодні"
+      : `сьогодні: ${k.views_today ?? 0}`;
+
+  const subSessions = (from || to)
+    ? `${k.views && k.sessions ? (k.views / k.sessions).toFixed(1) : 1} переглядів / сесію`
+    : period === "today"
+      ? `${k.views && k.sessions ? (k.views / k.sessions).toFixed(1) : 1} переглядів / сесію`
+      : period === "week"
+        ? `сьогодні: ${k.sessions_today ?? 0}`
+        : `за тиждень: ${k.sessions_week ?? 0}`;
+
   const kpis = [
-    { label: "Перегляди", value: k.views ?? 0, icon: IconTrend, color: "#2563eb", sub: `сьогодні: ${k.views_today ?? 0}` },
-    { label: "Унікальні сесії", value: k.sessions ?? 0, icon: IconUsers, color: "#0891b2", sub: `за тиждень: ${k.views_week ?? 0}` },
+    { label: "Перегляди", value: k.views ?? 0, icon: IconTrend, color: "#2563eb", sub: subViews },
+    { label: "Унікальні сесії", value: k.sessions ?? 0, icon: IconUsers, color: "#0891b2", sub: subSessions },
     { label: "Заявки", value: k.leads ?? 0, icon: IconInbox, color: "#16a34a", sub: `конверсія: ${k.conversion ?? 0}%` },
     { label: "Кліки «Подзвонити»", value: k.phone ?? 0, icon: IconPhone, color: "#d97706", sub: `WhatsApp: ${k.whatsapp ?? 0} · Viber: ${k.viber ?? 0} · TG: ${k.telegram ?? 0}` },
   ];

@@ -24,11 +24,13 @@ export async function GET(request: Request) {
     let where = "";
     const params: any[] = [];
     const interval: Record<string, string> = {
-      today: "1 day", week: "7 days", month: "30 days", quarter: "90 days", year: "365 days",
+      week: "7 days", month: "30 days", quarter: "90 days", year: "365 days",
     };
     if (from || to) {
       if (from) { params.push(from); where += ` AND created_at >= $${params.length}::date`; }
       if (to) { params.push(to); where += ` AND created_at < ($${params.length}::date + INTERVAL '1 day')`; }
+    } else if (period === "today") {
+      where += ` AND created_at >= CURRENT_DATE`;
     } else if (interval[period]) {
       where += ` AND created_at >= NOW() - INTERVAL '${interval[period]}'`;
     }
@@ -42,9 +44,11 @@ export async function GET(request: Request) {
     ] = await Promise.all([
       q(`SELECT
            COUNT(*) FILTER (WHERE event_type = 'page_view')::int AS views,
-           COUNT(DISTINCT NULLIF(session_id,''))::int AS sessions,
+           COUNT(DISTINCT CASE WHEN event_type = 'page_view' THEN NULLIF(session_id,'') END)::int AS sessions,
            COUNT(*) FILTER (WHERE event_type = 'page_view' AND created_at >= CURRENT_DATE)::int AS views_today,
+           COUNT(DISTINCT CASE WHEN event_type = 'page_view' AND created_at >= CURRENT_DATE THEN NULLIF(session_id,'') END)::int AS sessions_today,
            COUNT(*) FILTER (WHERE event_type = 'page_view' AND created_at >= DATE_TRUNC('week', NOW()))::int AS views_week,
+           COUNT(DISTINCT CASE WHEN event_type = 'page_view' AND created_at >= DATE_TRUNC('week', NOW()) THEN NULLIF(session_id,'') END)::int AS sessions_week,
            COUNT(*) FILTER (WHERE event_type = 'page_view' AND created_at >= DATE_TRUNC('week', NOW()) - INTERVAL '7 days' AND created_at < DATE_TRUNC('week', NOW()))::int AS views_prev_week,
            COUNT(*) FILTER (WHERE event_type = 'submit_application')::int AS leads,
            COUNT(*) FILTER (WHERE event_type = 'click_phone')::int AS phone,
