@@ -38,7 +38,7 @@ const sectionLabel = (s: string) => SECTION_LABELS[s] || s;
 const deviceLabel = (d: string) => DEVICE_LABELS[d] || d;
 
 /** Простий стовпчиковий графік на SVG (без зовнішніх бібліотек). */
-function Bars({ data, color = "#ff7a1a", height = 120 }: {
+function Bars({ data, color = "#e6be00", height = 120 }: {
   data: { label: string; value: number; extra?: number }[];
   color?: string; height?: number;
 }) {
@@ -270,7 +270,7 @@ export default function AnalyticsPage() {
             {/* автобуси */}
             <div className="a-card">
               <h3 style={{ fontSize: 15, marginBottom: 12 }}>Популярні автобуси</h3>
-              <Rank color="#ff7a1a" items={(data?.topBuses || []).map((b: any) => ({ name: b.name, value: b.views }))} empty="Ще не дивились" />
+              <Rank color="#e6be00" items={(data?.topBuses || []).map((b: any) => ({ name: b.name, value: b.views }))} empty="Ще не дивились" />
             </div>
 
             {/* джерела */}

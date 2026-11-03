@@ -1,17 +1,17 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900" preserveAspectRatio="xMidYMax slice">
   <defs>
     <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#0a1a2c"/>
-      <stop offset="55%" stop-color="#12314f"/>
-      <stop offset="100%" stop-color="#1b4066"/>
+      <stop offset="0%" stop-color="#050505"/>
+      <stop offset="55%" stop-color="#101010"/>
+      <stop offset="100%" stop-color="#1a1a1a"/>
     </linearGradient>
     <linearGradient id="glow" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#ff7a1a" stop-opacity="0.5"/>
-      <stop offset="100%" stop-color="#ff7a1a" stop-opacity="0"/>
+      <stop offset="0%" stop-color="#FFD400" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#FFD400" stop-opacity="0"/>
     </linearGradient>
     <linearGradient id="road" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#243549"/>
-      <stop offset="100%" stop-color="#0c1a28"/>
+      <stop offset="0%" stop-color="#1f1f1f"/>
+      <stop offset="100%" stop-color="#070707"/>
     </linearGradient>
     <pattern id="grid" width="64" height="64" patternUnits="userSpaceOnUse">
       <path d="M64 0H0V64" fill="none" stroke="#ffffff" stroke-opacity="0.03" stroke-width="1"/>
@@ -24,7 +24,7 @@
   <circle cx="180" cy="700" r="240" fill="url(#glow)" opacity="0.5"/>
 
   <!-- силуэт міста (верхня частина, не перетинається з контентом) -->
-  <g fill="#0c2033" opacity="0.75">
+  <g fill="#141414" opacity="0.75">
     <rect x="30" y="300" width="110" height="180"/>
     <rect x="160" y="250" width="80" height="230"/>
     <rect x="260" y="330" width="130" height="150"/>
@@ -34,7 +34,7 @@
     <rect x="1320" y="240" width="90" height="240"/>
     <rect x="1430" y="320" width="130" height="160"/>
   </g>
-  <g fill="#0f2942" opacity="0.9">
+  <g fill="#101010" opacity="0.9">
     <rect x="60" y="470" width="150" height="10"/>
     <rect x="300" y="470" width="90" height="10"/>
     <rect x="1220" y="470" width="140" height="10"/>
@@ -43,8 +43,8 @@
 
   <!-- дорога внизу -->
   <path d="M0 720 H1600 V900 H0 Z" fill="url(#road)"/>
-  <path d="M0 720 H1600" stroke="#37506e" stroke-width="3"/>
-  <g stroke="#ffb066" stroke-width="7" stroke-dasharray="66 52" opacity="0.75">
+  <path d="M0 720 H1600" stroke="#3a3a3a" stroke-width="3"/>
+  <g stroke="#FFD400" stroke-width="7" stroke-dasharray="66 52" opacity="0.75">
     <path d="M20 840 H1580"/>
   </g>
 </svg>
