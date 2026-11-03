@@ -32,6 +32,8 @@ export async function generateMetadata(): Promise<Metadata> {
       images: meta.hero_image ? [{ url: meta.hero_image }] : undefined,
     },
     robots: { index: true, follow: true },
+    // маркер збірки: допомагає одразу зрозуміти, яку саме версію бачить клієнт
+    other: { "br-build": (process.env.VERCEL_GIT_COMMIT_SHA || "local").slice(0, 7) },
   };
 }
 

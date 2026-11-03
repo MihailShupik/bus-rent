@@ -13,7 +13,7 @@
   --a-amber: #d97706;
 }
 
-.a-shell { display: flex; min-height: 100vh; background: var(--a-bg); font-family: "Inter", -apple-system, "Segoe UI", Roboto, Arial, sans-serif; color: var(--a-ink); }
+.a-shell { display: flex; min-height: 100vh; color-scheme: light; background: var(--a-bg); font-family: "Inter", -apple-system, "Segoe UI", Roboto, Arial, sans-serif; color: var(--a-ink); }
 
 .a-side {
   width: 262px; flex: none; background: linear-gradient(180deg, #050505 0%, #151515 100%);
@@ -159,7 +159,7 @@
 .a-toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); background: var(--a-navy); color: var(--a-accent); border: 1px solid rgba(255,212,0,0.35); padding: 13px 20px; border-radius: 12px; font-size: 14px; font-weight: 600; z-index: 400; box-shadow: 0 18px 40px rgba(9,22,36,0.3); }
 
 /* login */
-.a-login { min-height: 100vh; display: grid; place-items: center; color: var(--a-ink); background: radial-gradient(900px 480px at 70% 10%, rgba(255,212,0,0.16), transparent 60%), linear-gradient(135deg, #050505, #151515); padding: 20px; }
+.a-login { min-height: 100vh; display: grid; place-items: center; color-scheme: light; color: var(--a-ink); background: radial-gradient(900px 480px at 70% 10%, rgba(255,212,0,0.16), transparent 60%), linear-gradient(135deg, #050505, #151515); padding: 20px; }
 .a-login__card { width: min(410px, 100%); background: #fff; border-radius: 20px; padding: 34px; box-shadow: 0 30px 70px rgba(0,0,0,0.5); }
 .a-login__logo { width: 56px; height: 56px; border-radius: 16px; background: linear-gradient(135deg, var(--a-accent), #e6be00); display: grid; place-items: center; color: #0b0b0b; margin-bottom: 18px; }
 .a-login h1 { font-size: 23px; margin-bottom: 6px; }
