@@ -367,7 +367,7 @@ TELEGRAM_BOT_TOKEN=<токен від @BotFather>`}
         <div className="drawer__panel">
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
             <strong style={{ fontSize: 18 }}>{s("company_name", fbCompany)}</strong>
-            <button onClick={() => setDrawer(false)} aria-label="Закрити" style={{ background: "none", border: "none" }}><IconClose size={24} /></button>
+            <button className="drawer__close" onClick={() => setDrawer(false)} aria-label="Закрити"><IconClose size={24} /></button>
           </div>
           {navItems.map((n) => <a key={n.href} href={n.href} onClick={() => setDrawer(false)}>{n.label}</a>)}
           <div style={{ display: "grid", gap: 10, marginTop: 18 }}>

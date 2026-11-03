@@ -109,7 +109,7 @@ h1, h2, h3, h4 { line-height: 1.18; font-weight: 800; letter-spacing: -0.02em; }
 
 .header {
   position: sticky; top: 0; z-index: 90;
-  background: rgba(10, 10, 10, 0.94);
+  background: rgba(10, 10, 10, 0.985);
   backdrop-filter: saturate(160%) blur(12px); -webkit-backdrop-filter: saturate(160%) blur(12px);
   border-bottom: 1px solid #232323;
   box-shadow: 0 2px 18px rgba(0, 0, 0, 0.55);
@@ -158,11 +158,12 @@ h1, h2, h3, h4 { line-height: 1.18; font-weight: 800; letter-spacing: -0.02em; }
   box-shadow: var(--shadow-lg); animation: slideIn 0.28s ease;
   border-left: 1px solid #2a2a2a;
 }
-.drawer__panel a {
+.drawer__close { color: var(--ink); background: none; border: none; }
+.drawer__panel > a {
   padding: 13px 14px; border-radius: 12px; font-weight: 600; font-size: 16px; color: var(--ink);
   border-bottom: 1px solid var(--line);
 }
-.drawer__panel a:hover { background: #181818; color: var(--accent); }
+.drawer__panel > a:hover { background: #181818; color: var(--accent); }
 @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
 @keyframes fabIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 
