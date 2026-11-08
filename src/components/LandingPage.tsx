@@ -773,10 +773,12 @@ TELEGRAM_BOT_TOKEN=<токен від @BotFather>`}
             <div>
               <a className="brand" href="#hero">
                 <BrandMark logo={logo} size={26} />
-                <span className="brand__text">
-                  <strong>{s("company_name", fbCompany)}</strong>
-                  <small>{s("header_subtitle", "")}</small>
-                </span>
+                {!logo && (
+                  <span className="brand__text">
+                    <strong>{s("company_name", fbCompany)}</strong>
+                    <small>{s("header_subtitle", "")}</small>
+                  </span>
+                )}
               </a>
               <p style={{ marginTop: 16, maxWidth: 340 }}>{s("footer_text", "")}</p>
               <div className="footer__social">
