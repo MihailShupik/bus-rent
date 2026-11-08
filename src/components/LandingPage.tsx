@@ -35,7 +35,7 @@ function sessionId(): string {
  * (без рамок-«коробок»), інакше - стандартна SVG-іконка автобуса.
  */
 function BrandMark({ logo, size = 26, badge = false }: { logo?: string; size?: number; badge?: boolean }) {
-  if (logo) return <img className="brand__logo" src={logo} alt="" />;
+  if (logo) return <img className="brand__logo" src={logo} alt="BusRent" />;
   return <span className="brand__mark" style={badge ? { background: "linear-gradient(135deg,#FFD400,#E6BE00)" } : undefined}><IconBus size={size} /></span>;
 }
 

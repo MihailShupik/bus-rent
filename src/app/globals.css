@@ -128,7 +128,7 @@ h1, h2, h3, h4 { line-height: 1.18; font-weight: 800; letter-spacing: -0.02em; }
   color: var(--br-on-accent); display: grid; place-items: center;
   box-shadow: 0 8px 20px rgba(255, 212, 0, 0.22);
 }
-.brand__logo { height: 42px; width: auto; max-width: 150px; object-fit: contain; flex: none; display: block; }
+.brand__logo { height: 42px; width: auto; max-width: 230px; object-fit: contain; flex: none; display: block; }
 .brand__text strong { display: block; font-size: 19px; font-weight: 800; letter-spacing: -0.02em; color: #fff; }
 .brand__text small { display: block; font-size: 11.5px; color: var(--br-muted); }
 
@@ -549,7 +549,7 @@ h1, h2, h3, h4 { line-height: 1.18; font-weight: 800; letter-spacing: -0.02em; }
   .brand__text strong { font-size: 17.5px; }
   .brand { gap: 9px; }
   /* логотип без рамки-«наліпки» */
-  .brand__logo { height: 34px; max-width: 112px; }
+  .brand__logo { height: 34px; max-width: 180px; }
   .burger {
     padding: 9px; border-radius: 12px; background: #151515;
     border: 1px solid var(--br-line); display: grid; place-items: center; color: var(--br-accent);

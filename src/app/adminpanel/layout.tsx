@@ -83,7 +83,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         {open && <div className="a-overlay" onClick={() => setOpen(false)} />}
         <aside className={`a-side ${open ? "open" : ""}`}>
           <div className="a-side__head">
-            <span className="a-side__logo"><IconBus size={22} /></span>
+            <span className="a-side__logo"><img src="/bus-icon.png" alt="" /></span>
             <span className="a-side__title">BusRent<small>Адмін-панель</small></span>
           </div>
           <nav className="a-nav">

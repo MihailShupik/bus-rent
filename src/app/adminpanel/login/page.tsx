@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { IconBus } from "@/components/icons";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -35,7 +34,7 @@ export default function LoginPage() {
   return (
     <div className="a-login">
       <div className="a-login__card">
-        <span className="a-login__logo"><IconBus size={28} /></span>
+        <span className="a-login__logo"><img src="/bus-icon.png" alt="" /></span>
         <h1>Вхід в адмін-панель</h1>
         <p>Керуйте автопарком, послугами, контентом і заявками</p>
 

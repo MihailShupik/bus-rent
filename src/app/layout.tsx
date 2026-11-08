@@ -17,19 +17,21 @@ export async function generateMetadata(): Promise<Metadata> {
 
   const title = meta.seo_title || FALLBACK_TITLE;
   const description = meta.seo_description || FALLBACK_DESCRIPTION;
-  const icon = meta.logo_image || "/favicon.svg";
+  const icon = "/favicon.png";
 
   return {
     title,
     description,
     keywords: ["оренда автобуса", "оренда мікроавтобуса", "пасажирські перевезення", "трансфер", "автобус з водієм"],
-    icons: { icon, shortcut: icon, apple: icon },
+    icons: { icon, shortcut: icon, apple: "/apple-touch-icon.png" },
     openGraph: {
       title,
       description,
       type: "website",
       locale: "uk_UA",
-      images: meta.hero_image ? [{ url: meta.hero_image }] : undefined,
+      images: meta.hero_image
+        ? [{ url: meta.hero_image }]
+        : [{ url: "/og-image.png", width: 1200, height: 630, alt: "BusRent — оренда автобусів" }],
     },
     robots: { index: true, follow: true },
     // маркер збірки: допомагає одразу зрозуміти, яку саме версію бачить клієнт
