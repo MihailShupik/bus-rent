@@ -162,7 +162,7 @@ export async function uploadFile(file: File): Promise<string> {
   return uploadPhoto(file);
 }
 
-export function ImageField({ label, value, onChange, dark = false }: { label: string; value: string; onChange: (v: string) => void; dark?: boolean }) {
+export function ImageField({ label, value, onChange, dark = false, hint }: { label: string; value: string; onChange: (v: string) => void; dark?: boolean; hint?: string }) {
   const [busy, setBusy] = useState(false);
   const pick = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const f = e.target.files?.[0];
@@ -183,6 +183,7 @@ export function ImageField({ label, value, onChange, dark = false }: { label: st
         </label>
       </div>
       {value && <img src={value} alt="" style={{ maxHeight: 150, borderRadius: 10, marginTop: 8, objectFit: "contain", background: dark ? "#0b0b0b" : "#f3f6fa", padding: dark ? 10 : 0 }} />}
+      {hint && <small>{hint}</small>}
     </div>
   );
 }
@@ -395,7 +396,7 @@ export function ResourceManager({ type, title, description, addLabel, fields, de
       case "bool": return <BoolField key={f.key} label={f.label} value={val} onChange={set} />;
       case "select": return <SelectField key={f.key} label={f.label} value={val} onChange={set} options={f.options || []} hint={f.hint} />;
       case "icon": return <IconPicker key={f.key} label={f.label} value={val || "check"} onChange={set} />;
-      case "image": return <ImageField key={f.key} label={f.label} value={val} onChange={set} dark={f.key === "logo_image"} />;
+      case "image": return <ImageField key={f.key} label={f.label} value={val} onChange={set} dark={f.key === "logo_image"} hint={f.hint} />;
       case "list": return <ListEditor key={f.key} label={f.label} items={val} onChange={set} placeholder={f.placeholder} />;
       case "photos": return <PhotosManager key={f.key} photos={editing?.photos} mainPhoto={editing?.main_photo} captions={editing?.photo_captions} onChange={(photos, main, captions) => setEditing((prev: any) => ({ ...prev, photos, main_photo: main, photo_captions: captions }))} />;
       default: return <TextField key={f.key} label={f.label} value={val} onChange={set} placeholder={f.placeholder} hint={f.hint} />;

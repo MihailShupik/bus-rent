@@ -176,7 +176,7 @@ export default function SettingsAdmin() {
               const v = values[d.key] ?? "";
               const span = d.type === "textarea" || d.type === "image" || d.type === "list";
               if (d.type === "image") {
-                return <div key={d.key} className="span2"><ImageField label={d.label} value={v} onChange={(nv) => set(d.key, nv)} /></div>;
+                return <div key={d.key} className="span2"><ImageField label={d.label} value={v} onChange={(nv) => set(d.key, nv)} dark={d.key === "logo_image"} hint={d.hint} /></div>;
               }
               if (d.type === "select") {
                 return (
